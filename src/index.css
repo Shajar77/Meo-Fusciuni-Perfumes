@@ -1,0 +1,73 @@
+@import "tailwindcss";
+
+@font-face {
+    font-family: "font1";
+    src: url("./font1.woff2");
+}
+
+@font-face {
+    font-family: "font2";
+    src: url("./font2.woff2");
+}
+
+@font-face {
+    font-family: "font3";
+    src: url("./font3.woff2");
+}
+
+@font-face {
+    font-family: "font4";
+    src: url("./font4.ttf");
+}
+
+#font1 {
+    font-family: "font1";
+}
+
+#font2 {
+    font-family: "font2";
+}
+
+#font3 {
+    font-family: "font3";
+}
+
+#font4 {
+    font-family: "font4";
+}
+
+/* Custom Animations */
+@keyframes slow-zoom {
+    0% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(1.1);
+    }
+}
+
+@keyframes fade-up {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-slow-zoom {
+    animation: slow-zoom 20s ease-out forwards;
+}
+
+.animate-fade-up {
+    animation: fade-up 1s ease-out forwards;
+}
+
+.animate-fade-up-delay {
+    animation: fade-up 1s ease-out 0.3s forwards;
+    opacity: 0;
+}

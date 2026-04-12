@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { useAuth } from '../context/AuthContext'
 import { createOrder, initiateJazzCashPayment, initiateEasypaisaPayment, initiateCODPayment } from '../services/paymentService'
+import { perfumes } from '../data/perfumes'
 
 const Checkout = () => {
     const { id } = useParams()
@@ -24,27 +25,6 @@ const Checkout = () => {
         postalCode: '',
         country: 'Pakistan'
     })
-
-    const perfumes = [
-        { id: 1, name: 'Isola', priceSmall: 10, priceLarge: 220 },
-        { id: 2, name: '1# Nota di Viaggio', priceSmall: 8, priceLarge: 180 },
-        { id: 3, name: '2# Nota di Viaggio', priceSmall: 8, priceLarge: 180 },
-        { id: 4, name: '3# Nota di Viaggio', priceSmall: 8, priceLarge: 180 },
-        { id: 5, name: 'Notturno', priceSmall: 8, priceLarge: 180 },
-        { id: 6, name: 'Luce', priceSmall: 8, priceLarge: 180 },
-        { id: 7, name: 'Narcotico', priceSmall: 10, priceLarge: 220 },
-        { id: 8, name: 'Odor 93', priceSmall: 10, priceLarge: 220 },
-        { id: 9, name: 'Little Song', priceSmall: 8, priceLarge: 180 },
-        { id: 10, name: 'Magnificat', priceSmall: 10, priceLarge: 220 },
-        { id: 11, name: "L'Oblio", priceSmall: 8, priceLarge: 180 },
-        { id: 12, name: 'Oro Rosso', priceSmall: 10, priceLarge: 220 },
-        { id: 13, name: 'Venezia', priceSmall: 10, priceLarge: 220 },
-        { id: 14, name: 'Roma', priceSmall: 8, priceLarge: 180 },
-        { id: 15, name: 'Firenze', priceSmall: 10, priceLarge: 220 },
-        { id: 16, name: 'Milano', priceSmall: 8, priceLarge: 180 },
-        { id: 17, name: 'Napoli', priceSmall: 10, priceLarge: 220 },
-        { id: 18, name: 'Palermo', priceSmall: 8, priceLarge: 180 },
-    ]
 
     const perfume = perfumes.find(p => p.id === parseInt(id))
     const price = size === 'small' ? perfume?.priceSmall : perfume?.priceLarge
@@ -155,7 +135,7 @@ const Checkout = () => {
                 </div>
 
                 {/* Checkout Content */}
-                <div className='max-w-6xl mx-auto px-6 py-12 sm:py-16'>
+                <div className='max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-16'>
                     <div className='grid grid-cols-1 lg:grid-cols-3 gap-10 lg:gap-16'>
 
                         {/* Form Section */}
@@ -281,7 +261,7 @@ const Checkout = () => {
                                     <h2 id='font2' className='text-lg uppercase tracking-wider mb-6'>Payment Method</h2>
 
                                     {/* Payment Options */}
-                                    <div className='flex flex-wrap gap-4 mb-6'>
+                                    <div className='grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6'>
                                         <button
                                             type='button'
                                             onClick={() => setPaymentMethod('jazzcash')}
@@ -353,15 +333,18 @@ const Checkout = () => {
 
                         {/* Order Summary */}
                         <div className='lg:col-span-1'>
-                            <div className='bg-white p-6 sm:p-8 rounded-lg shadow-sm sticky top-24'>
+                            <div className='bg-white p-6 sm:p-8 rounded-lg shadow-sm lg:sticky lg:top-24'>
                                 <h2 id='font2' className='text-lg uppercase tracking-wider mb-6'>Order Summary</h2>
 
                                 {/* Product */}
                                 <div className='flex gap-4 pb-6 border-b border-gray-100'>
                                     <div className='w-20 h-20 bg-[#e8e8e8] rounded overflow-hidden'>
                                         <img
-                                            src='https://www.meofusciuni.com/en/wp-content/uploads/sites/2/2025/07/Meo-Fusciuni-Sito-Still-Life-rfer.001-683x908.jpeg'
+                                            src={perfume.image}
                                             alt={perfume.name}
+                                            loading='lazy'
+                                            decoding='async'
+                                            fetchPriority='low'
                                             className='w-full h-full object-contain'
                                         />
                                     </div>

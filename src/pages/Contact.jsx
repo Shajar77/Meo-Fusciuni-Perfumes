@@ -1,8 +1,66 @@
-import React from 'react'
+import { useState } from 'react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+import { submitContactForm } from '../services/contactService'
 
 const Contact = () => {
+    const [formData, setFormData] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        subject: '',
+        message: ''
+    })
+    const [loading, setLoading] = useState(false)
+    const [success, setSuccess] = useState(false)
+    const [error, setError] = useState('')
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }))
+        setError('')
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        setLoading(true)
+        setError('')
+        setSuccess(false)
+
+        // Validation
+        if (!formData.firstName || !formData.lastName || !formData.email || !formData.message) {
+            setError('Please fill in all required fields')
+            setLoading(false)
+            return
+        }
+
+        if (!formData.email.includes('@')) {
+            setError('Please enter a valid email address')
+            setLoading(false)
+            return
+        }
+
+        const result = await submitContactForm(formData)
+
+        if (result.success) {
+            setSuccess(true)
+            setFormData({
+                firstName: '',
+                lastName: '',
+                email: '',
+                subject: '',
+                message: ''
+            })
+        } else {
+            setError(result.error || 'Failed to send message. Please try again.')
+        }
+
+        setLoading(false)
+    }
+
     return (
         <div className='w-full'>
             <Navbar />
@@ -11,7 +69,7 @@ const Contact = () => {
 
                 {/* Hero Section */}
                 <section className='bg-black py-20 sm:py-28 lg:py-36'>
-                    <div className='max-w-4xl mx-auto px-6 text-center'>
+                    <div className='max-w-4xl mx-auto px-4 sm:px-6 text-center'>
                         <p id='font3' className='text-amber-400/80 text-xs sm:text-sm uppercase tracking-[0.3em] mb-6'>Get in Touch</p>
                         <h1 id='font1' className='text-white text-4xl sm:text-5xl lg:text-6xl xl:text-7xl mb-6'>
                             Contact Us
@@ -25,7 +83,7 @@ const Contact = () => {
 
                 {/* Main Content */}
                 <section className='bg-white py-20 sm:py-28'>
-                    <div className='max-w-6xl mx-auto px-6'>
+                    <div className='max-w-6xl mx-auto px-4 sm:px-6'>
                         <div className='grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24'>
 
                             {/* Contact Form */}
@@ -35,41 +93,75 @@ const Contact = () => {
                                     Write to Us
                                 </h2>
 
-                                <form className='space-y-6'>
+                                {success ? (
+                                <div className='bg-green-50 border border-green-200 rounded-lg p-8 text-center'>
+                                    <div className='w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4'>
+                                        <span className='text-2xl'>✓</span>
+                                    </div>
+                                    <h3 id='font2' className='text-xl text-green-800 mb-2'>Message Sent!</h3>
+                                    <p id='font3' className='text-green-600 mb-6'>Thank you for reaching out. We'll get back to you soon.</p>
+                                    <button
+                                        onClick={() => setSuccess(false)}
+                                        id='font2'
+                                        className='px-6 py-2 border border-green-600 text-green-700 rounded hover:bg-green-50 transition-colors'
+                                    >
+                                        Send Another Message
+                                    </button>
+                                </div>
+                            ) : (
+                                <form onSubmit={handleSubmit} className='space-y-6'>
+                                    {error && (
+                                        <div className='bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg'>
+                                            <p id='font3' className='text-sm'>{error}</p>
+                                        </div>
+                                    )}
+
                                     <div className='grid grid-cols-1 sm:grid-cols-2 gap-6'>
                                         <div>
                                             <label id='font2' className='block text-[11px] uppercase tracking-wider text-gray-500 mb-2'>
-                                                First Name
+                                                First Name *
                                             </label>
                                             <input
                                                 type='text'
+                                                name='firstName'
+                                                value={formData.firstName}
+                                                onChange={handleInputChange}
                                                 id='font3'
                                                 className='w-full border-b border-gray-300 py-3 text-base focus:outline-none focus:border-black transition-colors bg-transparent'
                                                 placeholder='John'
+                                                required
                                             />
                                         </div>
                                         <div>
                                             <label id='font2' className='block text-[11px] uppercase tracking-wider text-gray-500 mb-2'>
-                                                Last Name
+                                                Last Name *
                                             </label>
                                             <input
                                                 type='text'
+                                                name='lastName'
+                                                value={formData.lastName}
+                                                onChange={handleInputChange}
                                                 id='font3'
                                                 className='w-full border-b border-gray-300 py-3 text-base focus:outline-none focus:border-black transition-colors bg-transparent'
                                                 placeholder='Doe'
+                                                required
                                             />
                                         </div>
                                     </div>
 
                                     <div>
                                         <label id='font2' className='block text-[11px] uppercase tracking-wider text-gray-500 mb-2'>
-                                            Email Address
+                                            Email Address *
                                         </label>
                                         <input
                                             type='email'
+                                            name='email'
+                                            value={formData.email}
+                                            onChange={handleInputChange}
                                             id='font3'
                                             className='w-full border-b border-gray-300 py-3 text-base focus:outline-none focus:border-black transition-colors bg-transparent'
                                             placeholder='john@example.com'
+                                            required
                                         />
                                     </div>
 
@@ -78,6 +170,9 @@ const Contact = () => {
                                             Subject
                                         </label>
                                         <select
+                                            name='subject'
+                                            value={formData.subject}
+                                            onChange={handleInputChange}
                                             id='font3'
                                             className='w-full border-b border-gray-300 py-3 text-base focus:outline-none focus:border-black transition-colors bg-transparent cursor-pointer'
                                         >
@@ -92,24 +187,37 @@ const Contact = () => {
 
                                     <div>
                                         <label id='font2' className='block text-[11px] uppercase tracking-wider text-gray-500 mb-2'>
-                                            Message
+                                            Message *
                                         </label>
                                         <textarea
+                                            name='message'
+                                            value={formData.message}
+                                            onChange={handleInputChange}
                                             id='font3'
                                             rows='5'
                                             className='w-full border-b border-gray-300 py-3 text-base focus:outline-none focus:border-black transition-colors bg-transparent resize-none'
                                             placeholder='Your message...'
+                                            required
                                         ></textarea>
                                     </div>
 
                                     <button
                                         type='submit'
+                                        disabled={loading}
                                         id='font2'
-                                        className='mt-4 px-10 py-4 bg-black text-white text-[11px] uppercase tracking-[0.2em] hover:bg-amber-700 transition-colors duration-500'
+                                        className='mt-4 px-10 py-4 bg-black text-white text-[11px] uppercase tracking-[0.2em] hover:bg-amber-700 transition-colors duration-500 disabled:opacity-50 disabled:cursor-not-allowed'
                                     >
-                                        Send Message
+                                        {loading ? (
+                                            <span className='flex items-center justify-center gap-2'>
+                                                <span className='w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin'></span>
+                                                Sending...
+                                            </span>
+                                        ) : (
+                                            'Send Message'
+                                        )}
                                     </button>
                                 </form>
+                            )}
                             </div>
 
                             {/* Contact Info */}
@@ -188,7 +296,7 @@ const Contact = () => {
                                 {/* Social Links */}
                                 <div className='mt-12 pt-8 border-t border-gray-200'>
                                     <p id='font2' className='text-xs uppercase tracking-[0.2em] text-gray-500 mb-6'>Follow Us</p>
-                                    <div className='flex gap-4'>
+                                    <div className='flex flex-wrap gap-4'>
                                         <a href='#' className='w-10 h-10 border border-gray-200 rounded-full flex items-center justify-center hover:border-black hover:bg-black hover:text-white transition-all duration-300'>
                                             <svg className='w-4 h-4' fill='currentColor' viewBox='0 0 24 24'>
                                                 <path d='M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z' />
@@ -213,14 +321,14 @@ const Contact = () => {
 
                 {/* Map Section */}
                 <section className='bg-[#f5f5f0] py-20'>
-                    <div className='max-w-6xl mx-auto px-6'>
+                    <div className='max-w-6xl mx-auto px-4 sm:px-6'>
                         <div className='text-center mb-12'>
                             <p id='font2' className='text-xs uppercase tracking-[0.25em] text-amber-700 mb-4'>Visit Our Boutique</p>
                             <h2 id='font1' className='text-2xl sm:text-3xl text-black'>
                                 Gulberg III, Lahore
                             </h2>
                         </div>
-                        <div className='w-full h-[400px] bg-gray-200 rounded-lg overflow-hidden'>
+                        <div className='w-full h-[300px] sm:h-[400px] bg-gray-200 rounded-lg overflow-hidden'>
                             <iframe
                                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3401.8976044567!2d74.35287731511772!3d31.510534981388!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x391904f1b4ee8e9d%3A0x3e2e7c7c1b7a5d8a!2sM.M.%20Alam%20Road%2C%20Gulberg%20III%2C%20Lahore%2C%20Punjab%2C%20Pakistan!5e0!3m2!1sen!2s!4v1702383600000!5m2!1sen!2s"
                                 width="100%"

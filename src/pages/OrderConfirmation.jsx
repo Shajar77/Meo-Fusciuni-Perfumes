@@ -1,4 +1,3 @@
-import React from 'react'
 import { Link, useLocation, Navigate } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
@@ -23,14 +22,14 @@ const OrderConfirmation = () => {
                         <h1 id='font1' className='text-white text-3xl sm:text-4xl lg:text-5xl mb-4'>
                             Order Placed Successfully!
                         </h1>
-                        <p id='font3' className='text-white/80 text-lg'>
+                        <p id='font3' className='text-white/80 text-base sm:text-lg break-all'>
                             Order ID: <span className='font-bold'>{orderId}</span>
                         </p>
                     </div>
                 </div>
 
                 {/* Content */}
-                <div className='max-w-4xl mx-auto px-6 py-12 sm:py-16'>
+                <div className='max-w-4xl mx-auto px-4 sm:px-6 py-10 sm:py-16'>
                     <div className='grid grid-cols-1 lg:grid-cols-2 gap-8'>
 
                         {/* Payment Instructions */}
@@ -82,7 +81,7 @@ const OrderConfirmation = () => {
                                     <p id='font2' className='text-xs uppercase tracking-wider text-gray-500'>Shipping To</p>
                                     <p id='font3' className='text-sm text-gray-800'>{orderData?.customerName}</p>
                                     <p id='font3' className='text-sm text-gray-600'>{orderData?.address}</p>
-                                    <p id='font3' className='text-sm text-gray-600'>{orderData?.city}, {orderData?.postalCode}</p>
+                                    <p id='font3' className='text-sm text-gray-600 break-words'>{orderData?.city}, {orderData?.postalCode}</p>
                                     <p id='font3' className='text-sm text-gray-600'>{orderData?.phone}</p>
                                 </div>
                             </div>
@@ -143,7 +142,7 @@ const OrderConfirmation = () => {
 
                     {/* Note */}
                     <div className='bg-blue-50 p-4 rounded-lg mt-8 text-center'>
-                        <p id='font3' className='text-blue-800 text-sm'>
+                        <p id='font3' className='text-blue-800 text-sm break-words'>
                             📧 A confirmation email has been sent to <strong>{orderData?.email}</strong>
                         </p>
                     </div>

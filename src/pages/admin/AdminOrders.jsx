@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { collection, getDocs, updateDoc, doc, orderBy, query } from 'firebase/firestore'
 import { db } from '../../firebase'
@@ -52,7 +52,7 @@ const AdminOrders = () => {
         <div className='w-full min-h-screen bg-gray-50'>
             <Navbar />
             <div className='pt-[72px] sm:pt-[76px] lg:pt-[80px]'>
-                <div className='max-w-7xl mx-auto px-6 py-8'>
+                <div className='max-w-7xl mx-auto px-4 sm:px-6 py-8'>
                     {/* Header */}
                     <div className='mb-8'>
                         <Link to='/admin' id='font3' className='text-amber-700 hover:underline text-sm'>← Back to Dashboard</Link>
@@ -66,50 +66,52 @@ const AdminOrders = () => {
                         ) : orders.length === 0 ? (
                             <p id='font3' className='text-gray-500 text-center py-12'>No orders yet</p>
                         ) : (
-                            <table className='w-full'>
-                                <thead className='bg-gray-50'>
-                                    <tr>
-                                        <th id='font2' className='text-left py-4 px-6 text-xs uppercase tracking-wider text-gray-500'>Order ID</th>
-                                        <th id='font2' className='text-left py-4 px-6 text-xs uppercase tracking-wider text-gray-500'>Customer</th>
-                                        <th id='font2' className='text-left py-4 px-6 text-xs uppercase tracking-wider text-gray-500'>Items</th>
-                                        <th id='font2' className='text-left py-4 px-6 text-xs uppercase tracking-wider text-gray-500'>Total</th>
-                                        <th id='font2' className='text-left py-4 px-6 text-xs uppercase tracking-wider text-gray-500'>Payment</th>
-                                        <th id='font2' className='text-left py-4 px-6 text-xs uppercase tracking-wider text-gray-500'>Status</th>
-                                        <th id='font2' className='text-left py-4 px-6 text-xs uppercase tracking-wider text-gray-500'>Date</th>
-                                        <th id='font2' className='text-left py-4 px-6 text-xs uppercase tracking-wider text-gray-500'>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {orders.map((order) => (
-                                        <tr key={order.id} className='border-t border-gray-100 hover:bg-gray-50'>
-                                            <td id='font3' className='py-4 px-6 text-sm'>#{order.id.slice(0, 8)}</td>
-                                            <td className='py-4 px-6'>
-                                                <p id='font3' className='text-sm'>{order.customerName}</p>
-                                                <p id='font3' className='text-xs text-gray-500'>{order.email}</p>
-                                            </td>
-                                            <td id='font3' className='py-4 px-6 text-sm'>{order.items?.length || 1} item(s)</td>
-                                            <td id='font2' className='py-4 px-6 text-sm'>{order.total?.toFixed(2)} €</td>
-                                            <td id='font3' className='py-4 px-6 text-sm capitalize'>{order.paymentMethod}</td>
-                                            <td className='py-4 px-6'>
-                                                <span className={`px-3 py-1 rounded-full text-xs ${getStatusColor(order.status)}`}>
-                                                    {order.status || 'pending'}
-                                                </span>
-                                            </td>
-                                            <td id='font3' className='py-4 px-6 text-sm text-gray-500'>
-                                                {order.createdAt ? new Date(order.createdAt).toLocaleDateString() : 'N/A'}
-                                            </td>
-                                            <td className='py-4 px-6'>
-                                                <button
-                                                    onClick={() => setSelectedOrder(order)}
-                                                    className='text-blue-600 hover:underline text-sm'
-                                                >
-                                                    View
-                                                </button>
-                                            </td>
+                            <div className='overflow-x-auto'>
+                                <table className='w-full min-w-[860px]'>
+                                    <thead className='bg-gray-50'>
+                                        <tr>
+                                            <th id='font2' className='text-left py-4 px-6 text-xs uppercase tracking-wider text-gray-500'>Order ID</th>
+                                            <th id='font2' className='text-left py-4 px-6 text-xs uppercase tracking-wider text-gray-500'>Customer</th>
+                                            <th id='font2' className='text-left py-4 px-6 text-xs uppercase tracking-wider text-gray-500'>Items</th>
+                                            <th id='font2' className='text-left py-4 px-6 text-xs uppercase tracking-wider text-gray-500'>Total</th>
+                                            <th id='font2' className='text-left py-4 px-6 text-xs uppercase tracking-wider text-gray-500'>Payment</th>
+                                            <th id='font2' className='text-left py-4 px-6 text-xs uppercase tracking-wider text-gray-500'>Status</th>
+                                            <th id='font2' className='text-left py-4 px-6 text-xs uppercase tracking-wider text-gray-500'>Date</th>
+                                            <th id='font2' className='text-left py-4 px-6 text-xs uppercase tracking-wider text-gray-500'>Actions</th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        {orders.map((order) => (
+                                            <tr key={order.id} className='border-t border-gray-100 hover:bg-gray-50'>
+                                                <td id='font3' className='py-4 px-6 text-sm'>#{order.id.slice(0, 8)}</td>
+                                                <td className='py-4 px-6'>
+                                                    <p id='font3' className='text-sm'>{order.customerName}</p>
+                                                    <p id='font3' className='text-xs text-gray-500'>{order.email}</p>
+                                                </td>
+                                                <td id='font3' className='py-4 px-6 text-sm'>{order.items?.length || 1} item(s)</td>
+                                                <td id='font2' className='py-4 px-6 text-sm'>{order.total?.toFixed(2)} €</td>
+                                                <td id='font3' className='py-4 px-6 text-sm capitalize'>{order.paymentMethod}</td>
+                                                <td className='py-4 px-6'>
+                                                    <span className={`px-3 py-1 rounded-full text-xs ${getStatusColor(order.status)}`}>
+                                                        {order.status || 'pending'}
+                                                    </span>
+                                                </td>
+                                                <td id='font3' className='py-4 px-6 text-sm text-gray-500'>
+                                                    {order.createdAt ? new Date(order.createdAt).toLocaleDateString() : 'N/A'}
+                                                </td>
+                                                <td className='py-4 px-6'>
+                                                    <button
+                                                        onClick={() => setSelectedOrder(order)}
+                                                        className='text-blue-600 hover:underline text-sm'
+                                                    >
+                                                        View
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         )}
                     </div>
                 </div>

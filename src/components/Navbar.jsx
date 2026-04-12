@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { Link, useNavigate, NavLink } from 'react-router-dom'
 import { IoSearchOutline, IoCloseOutline } from "react-icons/io5";
 import { GoHeart } from "react-icons/go";
@@ -7,39 +7,32 @@ import { IoBagOutline } from "react-icons/io5";
 import { HiOutlineMenuAlt3 } from "react-icons/hi";
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
+import { perfumes, getPriceDisplay } from '../data/perfumes';
 
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
+    const [scrolled, setScrolled] = useState(false);
     const { user, logout, isAdmin } = useAuth();
     const { cartCount, favorites } = useCart();
     const navigate = useNavigate();
 
-    const perfumes = [
-        { id: 1, name: 'Isola', priceSmall: '10,00 €', priceLarge: '220,00 €' },
-        { id: 2, name: '1# Nota di Viaggio', priceSmall: '8,00 €', priceLarge: '180,00 €' },
-        { id: 3, name: '2# Nota di Viaggio', priceSmall: '8,00 €', priceLarge: '180,00 €' },
-        { id: 4, name: '3# Nota di Viaggio', priceSmall: '8,00 €', priceLarge: '180,00 €' },
-        { id: 5, name: 'Notturno', priceSmall: '8,00 €', priceLarge: '180,00 €' },
-        { id: 6, name: 'Luce', priceSmall: '8,00 €', priceLarge: '180,00 €' },
-        { id: 7, name: 'Narcotico', priceSmall: '10,00 €', priceLarge: '220,00 €' },
-        { id: 8, name: 'Odor 93', priceSmall: '10,00 €', priceLarge: '220,00 €' },
-        { id: 9, name: 'Little Song', priceSmall: '8,00 €', priceLarge: '180,00 €' },
-        { id: 10, name: 'Magnificat', priceSmall: '10,00 €', priceLarge: '220,00 €' },
-        { id: 11, name: "L'Oblio", priceSmall: '8,00 €', priceLarge: '180,00 €' },
-        { id: 12, name: 'Oro Rosso', priceSmall: '10,00 €', priceLarge: '220,00 €' },
-        { id: 13, name: 'Venezia', priceSmall: '10,00 €', priceLarge: '220,00 €' },
-        { id: 14, name: 'Roma', priceSmall: '8,00 €', priceLarge: '180,00 €' },
-        { id: 15, name: 'Firenze', priceSmall: '10,00 €', priceLarge: '220,00 €' },
-        { id: 16, name: 'Milano', priceSmall: '8,00 €', priceLarge: '180,00 €' },
-        { id: 17, name: 'Napoli', priceSmall: '10,00 €', priceLarge: '220,00 €' },
-        { id: 18, name: 'Palermo', priceSmall: '8,00 €', priceLarge: '180,00 €' },
-    ];
+    // Track scroll for glassmorphism intensity
+    useEffect(() => {
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 50);
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
-    const filteredPerfumes = searchQuery.length > 0
-        ? perfumes.filter(p => p.name.toLowerCase().includes(searchQuery.toLowerCase()))
-        : [];
+    const normalizedSearchQuery = searchQuery.trim().toLowerCase();
+    const filteredPerfumes = useMemo(() => (
+        normalizedSearchQuery.length > 0
+            ? perfumes.filter(p => p.name.toLowerCase().includes(normalizedSearchQuery))
+            : []
+    ), [normalizedSearchQuery]);
 
     const handleSearchClick = (id) => {
         setIsSearchOpen(false);
@@ -49,124 +42,205 @@ const Navbar = () => {
 
     return (
         <>
-            <nav id="font2" className='fixed top-0 left-0 right-0 z-50 flex items-center justify-between bg-white py-6 px-4 md:px-8 lg:px-12 shadow-sm'>
-                {/* Logo */}
-                <Link to='/'>
-                    <img src="/logo.png" className='h-7 md:h-8 lg:h-9' alt="MEO FUSCIUNI" />
+            {/* Premium Dark Navbar with Glassmorphism */}
+            <nav 
+                id="font2" 
+                className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between py-5 px-4 md:px-8 lg:px-12 transition-all duration-700 ease-out ${
+                    scrolled 
+                        ? 'bg-[var(--color-black-primary)]/90 backdrop-blur-xl border-b border-[var(--color-border)]' 
+                        : 'bg-gradient-to-b from-black/60 to-transparent'
+                }`}
+            >
+                {/* Logo - Premium Style */}
+                <Link to='/' className='relative group z-10'>
+                    <img 
+                        src="/logo.png" 
+                        className='h-8 md:h-9 lg:h-10 invert brightness-200 transition-all duration-500 group-hover:drop-shadow-[0_0_15px_rgba(201,169,98,0.5)]' 
+                        alt="MEO FUSCIUNI" 
+                        loading='eager'
+                        decoding='async'
+                        fetchPriority='high'
+                    />
                 </Link>
 
-                {/* Desktop Navigation Links */}
-                <div className='hidden md:flex font-semibold gap-4 lg:gap-8 uppercase text-[11px] lg:text-[13px] tracking-wide'>
-                    <NavLink to='/' end className={({ isActive }) => `hover:opacity-60 transition-all duration-300 relative pb-1 ${isActive ? 'border-b-2 border-black' : 'border-b-2 border-transparent'}`}>Home</NavLink>
-                    <NavLink to='/Perfumes' className={({ isActive }) => `hover:opacity-60 transition-all duration-300 relative pb-1 ${isActive ? 'border-b-2 border-black' : 'border-b-2 border-transparent'}`}>Perfumes</NavLink>
-                    <NavLink to='/Brand' className={({ isActive }) => `hover:opacity-60 transition-all duration-300 relative pb-1 ${isActive ? 'border-b-2 border-black' : 'border-b-2 border-transparent'}`}>Brand</NavLink>
-                    <NavLink to='/Contact' className={({ isActive }) => `hover:opacity-60 transition-all duration-300 relative pb-1 ${isActive ? 'border-b-2 border-black' : 'border-b-2 border-transparent'}`}>Contact</NavLink>
+                {/* Desktop Navigation - Premium Links */}
+                <div className='hidden md:flex items-center gap-6 lg:gap-10'>
+                    {[
+                        { to: '/', label: 'Home', end: true },
+                        { to: '/Perfumes', label: 'Perfumes' },
+                        { to: '/Brand', label: 'Brand' },
+                        { to: '/Contact', label: 'Contact' }
+                    ].map((item) => (
+                        <NavLink 
+                            key={item.to}
+                            to={item.to} 
+                            end={item.end}
+                            className={({ isActive }) =>
+                                `relative group py-2 text-[11px] lg:text-[12px] uppercase tracking-[0.1em] transition-all duration-500 ease-out ${
+                                    isActive ? 'text-[var(--color-gold)]' : 'text-[var(--color-text-primary)] hover:text-[var(--color-gold)]'
+                                }`
+                            }
+                        >
+                            {({ isActive }) => (
+                                <>
+                                    <span className="relative z-10">{item.label}</span>
+                                    <span
+                                        className={`absolute bottom-0 left-0 w-full h-[1px] bg-[var(--color-gold)] transform origin-left transition-transform duration-500 ease-out ${
+                                            isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
+                                        }`}
+                                    />
+                                </>
+                            )}
+                        </NavLink>
+                    ))}
                 </div>
 
-                {/* Desktop Icons */}
-                <div className='hidden md:flex items-center gap-3 lg:gap-4'>
-                    <span className='text-xs font-semibold mr-2'>EN</span>
-                    <IoSearchOutline
+                {/* Desktop Icons - Premium Dark Style */}
+                <div className='hidden md:flex items-center gap-4 lg:gap-6'>
+                    {/* Search */}
+                    <button
                         onClick={() => setIsSearchOpen(true)}
-                        className='text-lg lg:text-xl cursor-pointer hover:opacity-60 transition-opacity'
-                    />
+                        className='p-2 text-[var(--color-text-secondary)] hover:text-[var(--color-gold)] transition-all duration-300 hover:scale-110'
+                        aria-label="Search"
+                    >
+                        <IoSearchOutline className='text-xl' />
+                    </button>
 
-                    {/* Favorites Icon */}
-                    <Link to='/favorites' className='relative'>
-                        <GoHeart className='text-lg lg:text-xl cursor-pointer hover:opacity-60 transition-opacity' />
+                    {/* Favorites */}
+                    <Link 
+                        to='/favorites' 
+                        className='relative p-2 text-[var(--color-text-secondary)] hover:text-[var(--color-gold)] transition-all duration-300 hover:scale-110'
+                    >
+                        <GoHeart className='text-xl' />
                         {favorites.length > 0 && (
-                            <span className='absolute -top-2 -right-2 w-4 h-4 bg-red-500 text-white text-[10px] rounded-full flex items-center justify-center'>
+                            <span className='absolute -top-0.5 -right-0.5 w-4 h-4 bg-[var(--color-gold)] text-[var(--color-black-primary)] text-[9px] font-bold rounded-full flex items-center justify-center'>
                                 {favorites.length}
                             </span>
                         )}
                     </Link>
 
-                    {/* User Icon / Initial */}
+                    {/* User */}
                     {user ? (
                         <div className='relative group'>
-                            <div className='w-8 h-8 bg-black text-white rounded-full flex items-center justify-center cursor-pointer text-sm font-bold'>
+                            <div className='w-9 h-9 rounded-full bg-[var(--color-gold)] text-[var(--color-black-primary)] flex items-center justify-center cursor-pointer text-sm font-bold transition-all duration-300 group-hover:shadow-[0_0_20px_rgba(201,169,98,0.4)]'>
                                 {user.firstName.charAt(0).toUpperCase()}
                             </div>
-                            {/* Dropdown */}
-                            <div className='absolute right-0 top-full mt-2 w-48 bg-white shadow-xl rounded-lg py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300'>
-                                <p id='font2' className='px-4 py-2 text-xs text-gray-500 border-b border-gray-100'>
+                            {/* Dropdown - Premium Dark */}
+                            <div className='absolute right-0 top-full mt-3 w-52 bg-[var(--color-black-secondary)] border border-[var(--color-border)] rounded-lg py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 shadow-2xl'>
+                                <p id='font2' className='px-4 py-3 text-xs text-[var(--color-text-secondary)] border-b border-[var(--color-border)]'>
                                     Hello, {user.firstName}
                                 </p>
                                 {isAdmin() && (
-                                    <Link to='/admin' className='block px-4 py-2 text-sm text-purple-600 font-semibold hover:bg-purple-50'>📊 Dashboard</Link>
+                                    <Link to='/admin' className='block px-4 py-2.5 text-sm text-[var(--color-gold)] font-medium hover:bg-[var(--color-black-tertiary)] transition-colors'>
+                                        Dashboard
+                                    </Link>
                                 )}
-                                <Link to='/profile' className='block px-4 py-2 text-sm hover:bg-gray-50'>My Profile</Link>
-                                <Link to='/orders' className='block px-4 py-2 text-sm hover:bg-gray-50'>My Orders</Link>
+                                <Link to='/profile' className='block px-4 py-2.5 text-sm text-[var(--color-text-primary)] hover:text-[var(--color-gold)] hover:bg-[var(--color-black-tertiary)] transition-all'>
+                                    My Profile
+                                </Link>
+                                <Link to='/orders' className='block px-4 py-2.5 text-sm text-[var(--color-text-primary)] hover:text-[var(--color-gold)] hover:bg-[var(--color-black-tertiary)] transition-all'>
+                                    My Orders
+                                </Link>
                                 <button
                                     onClick={logout}
-                                    className='w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-50'
+                                    className='w-full text-left px-4 py-2.5 text-sm text-red-400 hover:text-red-300 hover:bg-[var(--color-black-tertiary)] transition-all border-t border-[var(--color-border)] mt-1'
                                 >
                                     Sign Out
                                 </button>
                             </div>
                         </div>
                     ) : (
-                        <Link to='/login'>
-                            <LuUser className='text-lg lg:text-xl cursor-pointer hover:opacity-60 transition-opacity' />
+                        <Link 
+                            to='/login'
+                            className='p-2 text-[var(--color-text-secondary)] hover:text-[var(--color-gold)] transition-all duration-300 hover:scale-110'
+                        >
+                            <LuUser className='text-xl' />
                         </Link>
                     )}
 
-                    {/* Cart Icon */}
-                    <Link to='/cart' className='relative'>
-                        <IoBagOutline className='text-lg lg:text-xl cursor-pointer hover:opacity-60 transition-opacity' />
+                    {/* Cart */}
+                    <Link 
+                        to='/cart' 
+                        className='relative p-2 text-[var(--color-text-secondary)] hover:text-[var(--color-gold)] transition-all duration-300 hover:scale-110'
+                    >
+                        <IoBagOutline className='text-xl' />
                         {cartCount > 0 && (
-                            <span className='absolute -top-2 -right-2 w-4 h-4 bg-black text-white text-[10px] rounded-full flex items-center justify-center'>
+                            <span className='absolute -top-0.5 -right-0.5 w-4 h-4 bg-[var(--color-gold)] text-[var(--color-black-primary)] text-[9px] font-bold rounded-full flex items-center justify-center'>
                                 {cartCount}
                             </span>
                         )}
                     </Link>
                 </div>
 
-                {/* Mobile Menu Button */}
-                <div className='flex md:hidden items-center gap-4'>
-                    <IoSearchOutline
+                {/* Mobile Menu Button - Premium Dark */}
+                <div className='flex md:hidden items-center gap-3'>
+                    <button
                         onClick={() => setIsSearchOpen(true)}
-                        className='text-xl cursor-pointer'
-                    />
+                        className='p-2 text-[var(--color-text-primary)]'
+                        aria-label="Search"
+                    >
+                        <IoSearchOutline className='text-xl' />
+                    </button>
                     <button
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
+                        className='p-2 text-[var(--color-text-primary)]'
+                        aria-label="Menu"
                     >
                         {isMenuOpen ? <IoCloseOutline className='text-2xl' /> : <HiOutlineMenuAlt3 className='text-2xl' />}
                     </button>
                 </div>
 
-                {/* Mobile Menu Overlay */}
+                {/* Mobile Menu - Full Screen Premium Dark */}
                 {isMenuOpen && (
-                    <div className='fixed inset-0 top-[60px] bg-white z-50 md:hidden'>
-                        <div className='flex flex-col items-center py-8 gap-6 uppercase text-sm font-semibold tracking-wide'>
-                            <NavLink to='/' end onClick={() => setIsMenuOpen(false)} className={({ isActive }) => isActive ? 'border-b-2 border-black pb-1' : ''}>Home</NavLink>
-                            <NavLink to='/Perfumes' onClick={() => setIsMenuOpen(false)} className={({ isActive }) => isActive ? 'border-b-2 border-black pb-1' : ''}>Perfumes</NavLink>
-                            <NavLink to='/Brand' onClick={() => setIsMenuOpen(false)} className={({ isActive }) => isActive ? 'border-b-2 border-black pb-1' : ''}>Brand</NavLink>
-                            <NavLink to='/Meo' onClick={() => setIsMenuOpen(false)} className={({ isActive }) => isActive ? 'border-b-2 border-black pb-1' : ''}>MEO FUSCIUNI</NavLink>
-                            <NavLink to='/Contact' onClick={() => setIsMenuOpen(false)} className={({ isActive }) => isActive ? 'border-b-2 border-black pb-1' : ''}>Contact</NavLink>
+                    <div className='fixed inset-0 top-[72px] bg-[var(--color-black-primary)] z-50 md:hidden sm:top-[76px]'>
+                        <div className='flex flex-col items-center py-12 gap-8'>
+                            {[
+                                { to: '/', label: 'Home' },
+                                { to: '/Perfumes', label: 'Perfumes' },
+                                { to: '/Brand', label: 'Brand' },
+                                { to: '/Contact', label: 'Contact' }
+                            ].map((item, index) => (
+                                <NavLink
+                                    key={item.to}
+                                    to={item.to} 
+                                    end={item.to === '/'}
+                                    onClick={() => setIsMenuOpen(false)} 
+                                    className={({ isActive }) => `
+                                        text-xl sm:text-2xl uppercase tracking-[0.1em] font-light text-center px-6
+                                        transition-all duration-500
+                                        animate-fade-up
+                                        ${isActive 
+                                            ? 'text-[var(--color-gold)]' 
+                                            : 'text-[var(--color-text-primary)] hover:text-[var(--color-gold)]'}
+                                    `}
+                                    style={{ animationDelay: `${index * 0.1}s` }}
+                                >
+                                    {item.label}
+                                </NavLink>
+                            ))}
 
-                            <div className='flex items-center gap-6 mt-4 pt-4 border-t border-gray-200 w-48 justify-center'>
-                                <Link to='/favorites' onClick={() => setIsMenuOpen(false)} className='relative'>
-                                    <GoHeart className='text-xl' />
+                            <div className='flex items-center gap-8 mt-8 pt-8 border-t border-[var(--color-border)]'>
+                                <Link to='/favorites' onClick={() => setIsMenuOpen(false)} className='relative text-[var(--color-text-secondary)]'>
+                                    <GoHeart className='text-2xl' />
                                     {favorites.length > 0 && (
-                                        <span className='absolute -top-2 -right-2 w-4 h-4 bg-red-500 text-white text-[10px] rounded-full flex items-center justify-center'>
+                                        <span className='absolute -top-1 -right-1 w-4 h-4 bg-[var(--color-gold)] text-[var(--color-black-primary)] text-[9px] font-bold rounded-full flex items-center justify-center'>
                                             {favorites.length}
                                         </span>
                                     )}
                                 </Link>
                                 {user ? (
-                                    <div className='w-8 h-8 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold'>
+                                    <div className='w-10 h-10 rounded-full bg-[var(--color-gold)] text-[var(--color-black-primary)] flex items-center justify-center text-base font-bold'>
                                         {user.firstName.charAt(0).toUpperCase()}
                                     </div>
                                 ) : (
-                                    <Link to='/login' onClick={() => setIsMenuOpen(false)}>
-                                        <LuUser className='text-xl' />
+                                    <Link to='/login' onClick={() => setIsMenuOpen(false)} className='text-[var(--color-text-secondary)]'>
+                                        <LuUser className='text-2xl' />
                                     </Link>
                                 )}
-                                <Link to='/cart' onClick={() => setIsMenuOpen(false)} className='relative'>
-                                    <IoBagOutline className='text-xl' />
+                                <Link to='/cart' onClick={() => setIsMenuOpen(false)} className='relative text-[var(--color-text-secondary)]'>
+                                    <IoBagOutline className='text-2xl' />
                                     {cartCount > 0 && (
-                                        <span className='absolute -top-2 -right-2 w-4 h-4 bg-black text-white text-[10px] rounded-full flex items-center justify-center'>
+                                        <span className='absolute -top-1 -right-1 w-4 h-4 bg-[var(--color-gold)] text-[var(--color-black-primary)] text-[9px] font-bold rounded-full flex items-center justify-center'>
                                             {cartCount}
                                         </span>
                                     )}
@@ -176,7 +250,7 @@ const Navbar = () => {
                             {user && (
                                 <button
                                     onClick={() => { logout(); setIsMenuOpen(false); }}
-                                    className='text-red-600 text-sm mt-4'
+                                    className='text-red-400 text-sm mt-4 uppercase tracking-wider'
                                 >
                                     Sign Out
                                 </button>
@@ -184,27 +258,30 @@ const Navbar = () => {
                         </div>
                     </div>
                 )}
+
             </nav>
 
-            {/* Search Modal */}
+            {/* Premium Search Modal - Dark Theme */}
             {isSearchOpen && (
-                <div className='fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm'>
-                    <div className='bg-white w-full'>
-                        <div className='max-w-4xl mx-auto px-6 py-8'>
+                <div className='fixed inset-0 z-[100] bg-[var(--color-black-primary)]/95 backdrop-blur-xl'>
+                    <div className='w-full min-h-screen'>
+                        <div className='max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8'>
                             {/* Search Header */}
-                            <div className='flex items-center justify-between mb-8'>
-                                <h2 id='font2' className='text-lg uppercase tracking-wider'>Search Perfumes</h2>
+                            <div className='flex items-center justify-between mb-12'>
+                                <h2 id='font2' className='text-base sm:text-lg uppercase tracking-[0.2em] text-[var(--color-text-primary)]'>
+                                    Search Perfumes
+                                </h2>
                                 <button
                                     onClick={() => { setIsSearchOpen(false); setSearchQuery(''); }}
-                                    className='p-2 hover:bg-gray-100 rounded-full transition-colors'
+                                    className='p-3 text-[var(--color-text-secondary)] hover:text-[var(--color-gold)] transition-all duration-300 hover:rotate-90'
                                 >
                                     <IoCloseOutline className='text-2xl' />
                                 </button>
                             </div>
 
-                            {/* Search Input */}
-                            <div className='relative mb-8'>
-                                <IoSearchOutline className='absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl' />
+                            {/* Search Input - Premium Dark */}
+                            <div className='relative mb-12'>
+                                <IoSearchOutline className='absolute left-0 top-1/2 -translate-y-1/2 text-[var(--color-gold)] text-2xl' />
                                 <input
                                     type='text'
                                     value={searchQuery}
@@ -212,52 +289,65 @@ const Navbar = () => {
                                     placeholder='Search for a perfume...'
                                     autoFocus
                                     id='font3'
-                                    className='w-full pl-12 pr-4 py-4 text-lg border-b-2 border-gray-200 focus:border-black focus:outline-none transition-colors bg-transparent'
+                                    className='w-full pl-10 sm:pl-12 pr-4 py-4 sm:py-6 text-lg sm:text-2xl bg-transparent border-b-2 border-[var(--color-border)] focus:border-[var(--color-gold)] focus:outline-none transition-all duration-500 text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)]'
                                 />
                             </div>
 
-                            {/* Search Results */}
-                            <div className='max-h-[60vh] overflow-y-auto'>
+                            {/* Search Results - Premium Dark Cards */}
+                            <div className='max-h-[55vh] sm:max-h-[60vh] overflow-y-auto'>
                                 {searchQuery.length > 0 && filteredPerfumes.length === 0 && (
-                                    <p id='font3' className='text-center text-gray-500 py-8'>No perfumes found for "{searchQuery}"</p>
+                                    <p id='font3' className='text-center text-[var(--color-text-muted)] py-12 text-lg'>
+                                        No perfumes found for "{searchQuery}"
+                                    </p>
                                 )}
 
                                 {filteredPerfumes.length > 0 && (
-                                    <div className='space-y-2'>
-                                        {filteredPerfumes.map((perfume) => (
+                                    <div className='space-y-3'>
+                                        {filteredPerfumes.map((perfume, index) => (
                                             <button
                                                 key={perfume.id}
                                                 onClick={() => handleSearchClick(perfume.id)}
-                                                className='w-full flex items-center gap-4 p-4 hover:bg-gray-50 rounded-lg transition-colors text-left'
+                                                className='w-full flex items-center gap-6 p-5 bg-[var(--color-black-secondary)] border border-[var(--color-border)] hover:border-[var(--color-gold)] rounded-xl transition-all duration-500 group animate-fade-up'
+                                                style={{ animationDelay: `${index * 0.05}s` }}
                                             >
-                                                <div className='w-16 h-16 bg-[#e8e8e8] rounded-lg overflow-hidden flex-shrink-0'>
+                                                <div className='w-20 h-20 bg-[var(--color-black-tertiary)] rounded-lg overflow-hidden flex-shrink-0'>
                                                     <img
-                                                        src='https://www.meofusciuni.com/en/wp-content/uploads/sites/2/2025/07/Meo-Fusciuni-Sito-Still-Life-rfer.001-683x908.jpeg'
+                                                        src={perfume.image}
                                                         alt={perfume.name}
-                                                        className='w-full h-full object-contain'
+                                                        loading='lazy'
+                                                        decoding='async'
+                                                        fetchPriority='low'
+                                                        className='w-full h-full object-contain group-hover:scale-110 transition-transform duration-700'
                                                     />
                                                 </div>
-                                                <div className='flex-1'>
-                                                    <p id='font1' className='text-base mb-1'>{perfume.name}</p>
-                                                    <p id='font2' className='text-sm text-amber-700'>{perfume.priceSmall} – {perfume.priceLarge}</p>
+                                                <div className='flex-1 text-left'>
+                                                    <p id='font1' className='text-xl text-[var(--color-text-primary)] mb-1 group-hover:text-[var(--color-gold)] transition-colors duration-300'>
+                                                        {perfume.name}
+                                                    </p>
+                                                    <p id='font2' className='text-sm text-[var(--color-gold)] tracking-wider'>
+                                                        {getPriceDisplay(perfume.priceSmall, perfume.priceLarge)}
+                                                    </p>
                                                 </div>
-                                                <span className='text-gray-400'>→</span>
+                                                <span className='text-[var(--color-gold)] text-2xl transform group-hover:translate-x-2 transition-transform duration-300'>→</span>
                                             </button>
                                         ))}
                                     </div>
                                 )}
 
-                                {/* Popular Searches (when no query) */}
+                                {/* Popular Searches - Premium Dark */}
                                 {searchQuery.length === 0 && (
-                                    <div>
-                                        <p id='font2' className='text-xs uppercase tracking-wider text-gray-400 mb-4'>Popular Searches</p>
-                                        <div className='flex flex-wrap gap-2'>
-                                            {['Isola', 'Notturno', 'Luce', 'Narcotico', 'Venezia'].map((name) => (
+                                    <div className='animate-fade-up'>
+                                        <p id='font2' className='text-xs uppercase tracking-[0.2em] text-[var(--color-text-muted)] mb-6'>
+                                            Popular Searches
+                                        </p>
+                                        <div className='flex flex-wrap gap-3'>
+                                            {['Isola', 'Notturno', 'Luce', 'Narcotico', 'Venezia'].map((name, index) => (
                                                 <button
                                                     key={name}
                                                     onClick={() => setSearchQuery(name)}
                                                     id='font3'
-                                                    className='px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-full text-sm transition-colors'
+                                                    className='px-6 py-3 bg-[var(--color-black-secondary)] border border-[var(--color-border)] hover:border-[var(--color-gold)] text-[var(--color-text-secondary)] hover:text-[var(--color-gold)] rounded-full text-sm transition-all duration-300 hover:scale-105'
+                                                    style={{ animationDelay: `${index * 0.1}s` }}
                                                 >
                                                     {name}
                                                 </button>

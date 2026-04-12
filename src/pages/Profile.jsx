@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { doc, updateDoc } from 'firebase/firestore'
 import { updatePassword, EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth'
@@ -118,7 +118,7 @@ const Profile = () => {
                 </div>
 
                 {/* Content */}
-                <div className='max-w-2xl mx-auto px-6 py-12'>
+                <div className='max-w-2xl mx-auto px-4 sm:px-6 py-10 sm:py-12'>
 
                     {/* Messages */}
                     {message && (
@@ -134,7 +134,7 @@ const Profile = () => {
 
                     {/* Profile Info */}
                     <div className='bg-white rounded-xl p-6 sm:p-8 shadow-sm mb-6'>
-                        <div className='flex justify-between items-center mb-6'>
+                        <div className='flex flex-wrap justify-between items-center gap-3 mb-6'>
                             <h2 id='font2' className='text-lg uppercase tracking-wider'>Profile Information</h2>
                             {!editing && (
                                 <button
@@ -148,7 +148,7 @@ const Profile = () => {
 
                         {editing ? (
                             <form onSubmit={handleUpdateProfile} className='space-y-4'>
-                                <div className='grid grid-cols-2 gap-4'>
+                                <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
                                     <div>
                                         <label id='font2' className='block text-[10px] uppercase tracking-wider text-gray-500 mb-2'>First Name</label>
                                         <input
@@ -200,19 +200,19 @@ const Profile = () => {
                             </form>
                         ) : (
                             <div className='space-y-4'>
-                                <div className='flex justify-between py-3 border-b border-gray-100'>
+                                <div className='flex flex-col sm:flex-row sm:justify-between gap-1 py-3 border-b border-gray-100'>
                                     <span id='font3' className='text-gray-500'>Name</span>
-                                    <span id='font2'>{user?.firstName} {user?.lastName}</span>
+                                    <span id='font2' className='break-words'>{user?.firstName} {user?.lastName}</span>
                                 </div>
-                                <div className='flex justify-between py-3 border-b border-gray-100'>
+                                <div className='flex flex-col sm:flex-row sm:justify-between gap-1 py-3 border-b border-gray-100'>
                                     <span id='font3' className='text-gray-500'>Email</span>
-                                    <span id='font3'>{user?.email}</span>
+                                    <span id='font3' className='break-all'>{user?.email}</span>
                                 </div>
-                                <div className='flex justify-between py-3 border-b border-gray-100'>
+                                <div className='flex flex-col sm:flex-row sm:justify-between gap-1 py-3 border-b border-gray-100'>
                                     <span id='font3' className='text-gray-500'>Phone</span>
                                     <span id='font3'>{user?.phone || 'Not set'}</span>
                                 </div>
-                                <div className='flex justify-between py-3'>
+                                <div className='flex flex-col sm:flex-row sm:justify-between gap-2 py-3'>
                                     <span id='font3' className='text-gray-500'>Account Type</span>
                                     <span className={`px-3 py-1 rounded-full text-xs ${user?.role === 'admin' ? 'bg-purple-100 text-purple-700' : 'bg-gray-100 text-gray-700'}`}>
                                         {user?.role || 'User'}

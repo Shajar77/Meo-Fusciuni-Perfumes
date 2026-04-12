@@ -1,12 +1,10 @@
-import React from 'react'
-
 const Footer = () => {
     return (
-        <footer className='w-full bg-black text-white pt-20'>
+        <footer className='w-full bg-black text-white pt-16 sm:pt-20'>
             {/* Newsletter Section */}
             <div className='pt-12 pb-16'>
                 <div className='max-w-xl mx-auto px-6 text-center'>
-                    <h3 id='font2' className='text-[14px] uppercase tracking-[0.25em] text-amber-200/90 mb-5'>
+                    <h3 id='font2' className='text-xs sm:text-[14px] uppercase tracking-[0.2em] sm:tracking-[0.25em] text-amber-200/90 mb-5'>
                         Subscribe to the Meo Fusciuni Newsletter
                     </h3>
                     <div className='flex flex-col sm:flex-row items-stretch justify-center gap-0'>
@@ -18,7 +16,7 @@ const Footer = () => {
                         />
                         <button
                             id='font4'
-                            className='bg-white text-black px-6 py-2.5 text-[10px] uppercase tracking-[0.15em] hover:bg-white/90 transition-colors duration-300'
+                            className='bg-white text-black px-6 py-2.5 text-[10px] uppercase tracking-[0.15em] hover:bg-white/90 transition-colors duration-300 w-full sm:w-auto'
                         >
                             Subscribe
                         </button>
@@ -90,12 +88,12 @@ const Footer = () => {
                                 <h4 id='font2' className='text-[13px] uppercase tracking-[0.15em] text-white mb-5'>
                                     Customer Care
                                 </h4>
-                                <ul className='space-y-2.5'>
+                                <ul className='grid grid-cols-2 gap-x-6 gap-y-2.5'>
                                     <li><a href='#' id='font2' className='text-[13px] text-white/60 hover:text-white transition-colors duration-300'>FAQ</a></li>
-                                    <li><a href='#' id='font2' className='text-[13px] text-white/60 hover:text-white transition-colors duration-300'>Shipping</a></li>
-                                    <li><a href='#' id='font2' className='text-[13px] text-amber-200/90 hover:text-amber-200 transition-colors duration-300'>Returns and Refunds</a></li>
                                     <li><a href='#' id='font2' className='text-[13px] text-white/60 hover:text-white transition-colors duration-300'>Payments</a></li>
+                                    <li><a href='#' id='font2' className='text-[13px] text-white/60 hover:text-white transition-colors duration-300'>Shipping</a></li>
                                     <li><a href='#' id='font2' className='text-[13px] text-white/60 hover:text-white transition-colors duration-300'>Order Tracking</a></li>
+                                    <li className='col-span-2'><a href='#' id='font2' className='text-[13px] text-amber-200/90 hover:text-amber-200 transition-colors duration-300'>Returns and Refunds</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -120,7 +118,7 @@ const Footer = () => {
                             <span className='text-[6px] text-white/50'>PP</span>
                         </div>
                     </div>
-                    <p id='font3' className='text-[8px] text-white/30 text-center tracking-wide'>
+                    <p id='font3' className='text-[8px] sm:text-[9px] text-white/30 text-center tracking-wide px-2'>
                         © Meo Fusciuni srl | Via Mazzini 27 - 98039 Taormina (ME) Italy - P.IVA 03841400947 REA: GP 370330
                     </p>
                 </div>

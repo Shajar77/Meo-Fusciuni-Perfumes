@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore'
 import { db } from '../../firebase'
@@ -52,7 +52,7 @@ const AdminDashboard = () => {
         <div className='w-full min-h-screen bg-gray-50'>
             <Navbar />
             <div className='pt-[72px] sm:pt-[76px] lg:pt-[80px]'>
-                <div className='max-w-7xl mx-auto px-6 py-8'>
+                <div className='max-w-7xl mx-auto px-4 sm:px-6 py-8'>
                     {/* Header */}
                     <div className='mb-8'>
                         <h1 id='font1' className='text-3xl sm:text-4xl'>Admin Dashboard</h1>
@@ -107,7 +107,7 @@ const AdminDashboard = () => {
                             <p id='font3' className='text-gray-500 text-center py-8'>No orders yet</p>
                         ) : (
                             <div className='overflow-x-auto'>
-                                <table className='w-full'>
+                                <table className='w-full min-w-[680px]'>
                                     <thead>
                                         <tr className='border-b border-gray-100'>
                                             <th id='font2' className='text-left py-3 text-xs uppercase tracking-wider text-gray-500'>Order ID</th>

@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, useEffect } from 'react'
+/* eslint-disable react-refresh/only-export-components */
+import { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react'
 import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
@@ -22,7 +23,7 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true)
 
     // Get user data from Firestore (defined first so other functions can use it)
-    const getUserData = async (uid) => {
+    const getUserData = useCallback(async (uid) => {
         try {
             const userDoc = await getDoc(doc(db, 'users', uid))
             if (userDoc.exists()) {
@@ -33,10 +34,10 @@ export const AuthProvider = ({ children }) => {
             console.error('Error fetching user data:', error)
             return null
         }
-    }
+    }, [])
 
     // Sign up with email
-    const signUp = async (email, password, firstName, lastName) => {
+    const signUp = useCallback(async (email, password, firstName, lastName) => {
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password)
 
@@ -56,24 +57,23 @@ export const AuthProvider = ({ children }) => {
         } catch (error) {
             return { success: false, error: error.message }
         }
-    }
+    }, [])
 
     // Sign in with email
-    const signIn = async (email, password) => {
+    const signIn = useCallback(async (email, password) => {
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password)
             // Fetch user data to get role for redirect
-            const userData = await getDoc(doc(db, 'users', userCredential.user.uid))
-            const role = userData.exists() ? userData.data().role : 'user'
-            console.log('User role on login:', role) // Debug log
+            const userData = await getUserData(userCredential.user.uid)
+            const role = userData?.role || 'user'
             return { success: true, user: userCredential.user, role: role }
         } catch (error) {
             return { success: false, error: error.message }
         }
-    }
+    }, [getUserData])
 
     // Sign out
-    const logout = async () => {
+    const logout = useCallback(async () => {
         try {
             await firebaseSignOut(auth)
             setUser(null)
@@ -82,22 +82,22 @@ export const AuthProvider = ({ children }) => {
         } catch (error) {
             return { success: false, error: error.message }
         }
-    }
+    }, [])
 
     // Reset password
-    const resetPassword = async (email) => {
+    const resetPassword = useCallback(async (email) => {
         try {
             await sendPasswordResetEmail(auth, email)
             return { success: true }
         } catch (error) {
             return { success: false, error: error.message }
         }
-    }
+    }, [])
 
     // Check if user is admin
-    const isAdmin = () => {
+    const isAdmin = useCallback(() => {
         return userRole === 'admin'
-    }
+    }, [userRole])
 
     // Listen for auth state changes
     useEffect(() => {
@@ -121,9 +121,9 @@ export const AuthProvider = ({ children }) => {
         })
 
         return unsubscribe
-    }, [])
+    }, [getUserData])
 
-    const value = {
+    const value = useMemo(() => ({
         user,
         userRole,
         loading,
@@ -133,7 +133,7 @@ export const AuthProvider = ({ children }) => {
         resetPassword,
         isAdmin,
         getUserData
-    }
+    }), [user, userRole, loading, signUp, signIn, logout, resetPassword, isAdmin, getUserData])
 
     return (
         <AuthContext.Provider value={value}>

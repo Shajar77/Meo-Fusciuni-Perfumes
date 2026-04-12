@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore'
 import { db } from '../../firebase'
@@ -89,9 +89,9 @@ const AdminProducts = () => {
         <div className='w-full min-h-screen bg-gray-50'>
             <Navbar />
             <div className='pt-[72px] sm:pt-[76px] lg:pt-[80px]'>
-                <div className='max-w-7xl mx-auto px-6 py-8'>
+                <div className='max-w-7xl mx-auto px-4 sm:px-6 py-8'>
                     {/* Header */}
-                    <div className='flex justify-between items-center mb-8'>
+                    <div className='flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-8'>
                         <div>
                             <Link to='/admin' id='font3' className='text-amber-700 hover:underline text-sm'>← Back to Dashboard</Link>
                             <h1 id='font1' className='text-3xl sm:text-4xl mt-2'>Manage Products</h1>
@@ -99,7 +99,7 @@ const AdminProducts = () => {
                         <button
                             onClick={() => { setEditingProduct(null); setFormData({ name: '', priceSmall: '', priceLarge: '', description: '', notes: '', story: '' }); setShowModal(true); }}
                             id='font2'
-                            className='px-6 py-3 bg-black text-white text-sm uppercase tracking-wider hover:bg-amber-700 transition-colors rounded-lg'
+                            className='w-full sm:w-auto px-6 py-3 bg-black text-white text-sm uppercase tracking-wider hover:bg-amber-700 transition-colors rounded-lg'
                         >
                             + Add Product
                         </button>
@@ -112,42 +112,44 @@ const AdminProducts = () => {
                         ) : products.length === 0 ? (
                             <p id='font3' className='text-gray-500 text-center py-12'>No products found. Add your first product!</p>
                         ) : (
-                            <table className='w-full'>
-                                <thead className='bg-gray-50'>
-                                    <tr>
-                                        <th id='font2' className='text-left py-4 px-6 text-xs uppercase tracking-wider text-gray-500'>Product</th>
-                                        <th id='font2' className='text-left py-4 px-6 text-xs uppercase tracking-wider text-gray-500'>Price (30ml)</th>
-                                        <th id='font2' className='text-left py-4 px-6 text-xs uppercase tracking-wider text-gray-500'>Price (100ml)</th>
-                                        <th id='font2' className='text-left py-4 px-6 text-xs uppercase tracking-wider text-gray-500'>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {products.map((product) => (
-                                        <tr key={product.id} className='border-t border-gray-100'>
-                                            <td className='py-4 px-6'>
-                                                <p id='font1' className='text-base'>{product.name}</p>
-                                                <p id='font3' className='text-sm text-gray-500 truncate max-w-xs'>{product.description}</p>
-                                            </td>
-                                            <td id='font2' className='py-4 px-6'>{product.priceSmall},00 €</td>
-                                            <td id='font2' className='py-4 px-6'>{product.priceLarge},00 €</td>
-                                            <td className='py-4 px-6'>
-                                                <button
-                                                    onClick={() => handleEdit(product)}
-                                                    className='text-blue-600 hover:underline text-sm mr-4'
-                                                >
-                                                    Edit
-                                                </button>
-                                                <button
-                                                    onClick={() => handleDelete(product.id)}
-                                                    className='text-red-600 hover:underline text-sm'
-                                                >
-                                                    Delete
-                                                </button>
-                                            </td>
+                            <div className='overflow-x-auto'>
+                                <table className='w-full min-w-[640px]'>
+                                    <thead className='bg-gray-50'>
+                                        <tr>
+                                            <th id='font2' className='text-left py-4 px-6 text-xs uppercase tracking-wider text-gray-500'>Product</th>
+                                            <th id='font2' className='text-left py-4 px-6 text-xs uppercase tracking-wider text-gray-500'>Price (30ml)</th>
+                                            <th id='font2' className='text-left py-4 px-6 text-xs uppercase tracking-wider text-gray-500'>Price (100ml)</th>
+                                            <th id='font2' className='text-left py-4 px-6 text-xs uppercase tracking-wider text-gray-500'>Actions</th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        {products.map((product) => (
+                                            <tr key={product.id} className='border-t border-gray-100'>
+                                                <td className='py-4 px-6'>
+                                                    <p id='font1' className='text-base'>{product.name}</p>
+                                                    <p id='font3' className='text-sm text-gray-500 truncate max-w-xs'>{product.description}</p>
+                                                </td>
+                                                <td id='font2' className='py-4 px-6'>{product.priceSmall},00 €</td>
+                                                <td id='font2' className='py-4 px-6'>{product.priceLarge},00 €</td>
+                                                <td className='py-4 px-6 whitespace-nowrap'>
+                                                    <button
+                                                        onClick={() => handleEdit(product)}
+                                                        className='text-blue-600 hover:underline text-sm mr-4'
+                                                    >
+                                                        Edit
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleDelete(product.id)}
+                                                        className='text-red-600 hover:underline text-sm'
+                                                    >
+                                                        Delete
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         )}
                     </div>
                 </div>
@@ -170,7 +172,7 @@ const AdminProducts = () => {
                                         className='w-full border border-gray-200 px-4 py-3 rounded-lg focus:outline-none focus:border-black'
                                     />
                                 </div>
-                                <div className='grid grid-cols-2 gap-4'>
+                                <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
                                     <div>
                                         <label id='font2' className='block text-[10px] uppercase tracking-wider text-gray-500 mb-2'>Price 30ml (€)</label>
                                         <input

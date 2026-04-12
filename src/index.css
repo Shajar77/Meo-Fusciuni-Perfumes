@@ -1,73 +1,293 @@
+@font-face {
+  font-family: 'Vonca';
+  src: url('/vonca-font/vonca-regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Vonca';
+  src: url('/vonca-font/vonca-medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Vonca';
+  src: url('/vonca-font/vonca-semibold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Vonca';
+  src: url('/vonca-font/vonca-bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Vonca';
+  src: url('/vonca-font/vonca-extrabold.otf') format('opentype');
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Vonca';
+  src: url('/vonca-font/vonca-light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Vonca';
+  src: url('/vonca-font/vonca-extralight.otf') format('opentype');
+  font-weight: 200;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'CustomBody';
+  src: url('/font1-XymsSo8n.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+}
 @import "tailwindcss";
 
-@font-face {
-    font-family: "font1";
-    src: url("./font1.woff2");
+/* CSS Variables - Premium Dark Palette */
+:root {
+  --color-black-primary: #0a0a0a;
+  --color-black-secondary: #141414;
+  --color-black-tertiary: #1a1a1a;
+  --color-gold: #d4af37;
+  --color-gold-light: #e8c547;
+  --color-gold-dark: #a08020;
+  --color-amber: #8b6914;
+  --color-text-primary: #f5f5f5;
+  --color-text-secondary: #a3a3a3;
+  --color-text-muted: #737373;
+  --color-border: #262626;
+  --color-border-light: #404040;
+  
+  --ease-luxury: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@font-face {
-    font-family: "font2";
-    src: url("./font2.woff2");
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
 }
 
-@font-face {
-    font-family: "font3";
-    src: url("./font3.woff2");
+/* Custom Scrollbar - Dark Luxury */
+::-webkit-scrollbar {
+  width: 8px;
 }
 
-@font-face {
-    font-family: "font4";
-    src: url("./font4.ttf");
+::-webkit-scrollbar-track {
+  background: var(--color-black-primary);
 }
 
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gold-dark);
+}
+
+/* Selection Color */
+::selection {
+  background: var(--color-gold);
+  color: var(--color-black-primary);
+}
+
+/* Typography - Premium Serif for headlines */
 #font1 {
-    font-family: "font1";
+  font-family: "Vonca", serif;
+  font-weight: 500;
+  line-height: 1.1;
 }
 
 #font2 {
-    font-family: "font2";
+  font-family: "CustomBody", sans-serif;
+  letter-spacing: 0.08em;
 }
 
 #font3 {
-    font-family: "font3";
+  font-family: "CustomBody", sans-serif;
+  font-weight: 300;
+  line-height: 1.7;
 }
 
 #font4 {
-    font-family: "font4";
+  font-family: "CustomBody", sans-serif;
+  font-weight: 600;
 }
 
-/* Custom Animations */
-@keyframes slow-zoom {
-    0% {
-        transform: scale(1);
-    }
+/* Grain Overlay - Premium Texture */
+.grain-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
 
-    100% {
-        transform: scale(1.1);
-    }
+/* Ambient Gradient Animation */
+@keyframes ambient-glow {
+  0%, 100% {
+    opacity: 0.4;
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: translate(-20px, -20px) scale(1.1);
+  }
+}
+
+/* Premium Animations */
+@keyframes slow-zoom {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.1); }
 }
 
 @keyframes fade-up {
     0% {
         opacity: 0;
-        transform: translateY(30px);
+        transform: translateY(40px);
     }
-
     100% {
         opacity: 1;
         transform: translateY(0);
     }
 }
 
+@keyframes fade-in {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@keyframes slide-up {
+    0% {
+        opacity: 0;
+        transform: translateY(100%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); }
+    50% { box-shadow: 0 0 40px rgba(212, 175, 55, 0.5); }
+}
+
+/* Utility Classes */
 .animate-slow-zoom {
     animation: slow-zoom 20s ease-out forwards;
 }
 
 .animate-fade-up {
-    animation: fade-up 1s ease-out forwards;
+    animation: fade-up 0.8s var(--ease-out-expo) forwards;
 }
 
 .animate-fade-up-delay {
-    animation: fade-up 1s ease-out 0.3s forwards;
+    animation: fade-up 0.8s var(--ease-out-expo) 0.2s forwards;
     opacity: 0;
+}
+
+.animate-slide-up {
+    animation: slide-up 0.8s var(--ease-out-expo) forwards;
+}
+
+.animate-float {
+    animation: float 3s ease-in-out infinite;
+}
+
+.animate-shimmer {
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+}
+
+.animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Hover Effects */
+.hover-lift {
+    transition: transform 0.4s var(--ease-out-expo), box-shadow 0.4s var(--ease-out-expo);
+}
+
+.hover-lift:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.hover-glow:hover {
+    box-shadow: 0 0 30px rgba(201, 169, 98, 0.3);
+}
+
+.hover-scale {
+    transition: transform 0.6s var(--ease-luxury);
+}
+
+.hover-scale:hover {
+    transform: scale(1.05);
+}
+
+/* Text Reveal Animation */
+.text-reveal {
+    overflow: hidden;
+}
+
+.text-reveal > span {
+    display: inline-block;
+    transform: translateY(100%);
+    animation: slide-up 0.8s var(--ease-out-expo) forwards;
+}
+
+/* Magnetic Button Effect Base */
+.magnetic-btn {
+    transition: transform 0.3s var(--ease-out-expo);
+}
+
+/* Glassmorphism */
+.glass {
+    background: rgba(20, 20, 20, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Gold Gradient Text */
+.gold-text {
+    background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-light) 50%, var(--color-gold) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Premium Divider */
+.gold-divider {
+    width: 60px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
 }

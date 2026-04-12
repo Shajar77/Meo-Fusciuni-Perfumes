@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { collection, query, where, getDocs, orderBy } from 'firebase/firestore'
 import { db } from '../firebase'
@@ -11,13 +11,8 @@ const MyOrders = () => {
     const [orders, setOrders] = useState([])
     const [loading, setLoading] = useState(true)
 
-    useEffect(() => {
-        if (user) {
-            fetchOrders()
-        }
-    }, [user])
-
-    const fetchOrders = async () => {
+    const fetchOrders = useCallback(async () => {
+        if (!user) return
         try {
             const q = query(
                 collection(db, 'orders'),
@@ -31,7 +26,11 @@ const MyOrders = () => {
         } finally {
             setLoading(false)
         }
-    }
+    }, [user])
+
+    useEffect(() => {
+        fetchOrders()
+    }, [fetchOrders])
 
     const getStatusColor = (status) => {
         switch (status) {
@@ -59,7 +58,7 @@ const MyOrders = () => {
                 </div>
 
                 {/* Content */}
-                <div className='max-w-4xl mx-auto px-6 py-12 sm:py-16'>
+                <div className='max-w-4xl mx-auto px-4 sm:px-6 py-10 sm:py-16'>
                     {loading ? (
                         <div className='text-center py-12'>
                             <div className='w-12 h-12 border-4 border-gray-200 border-t-black rounded-full animate-spin mx-auto mb-4'></div>
@@ -81,10 +80,10 @@ const MyOrders = () => {
                     ) : (
                         <div className='space-y-4'>
                             {orders.map((order) => (
-                                <div key={order.id} className='bg-white rounded-xl p-6 shadow-sm'>
-                                    <div className='flex flex-wrap justify-between items-start gap-4 mb-4'>
+                                <div key={order.id} className='bg-white rounded-xl p-4 sm:p-6 shadow-sm'>
+                                    <div className='flex flex-wrap justify-between items-start gap-3 sm:gap-4 mb-4'>
                                         <div>
-                                            <p id='font2' className='text-sm uppercase tracking-wider'>Order #{order.orderId || order.id.slice(0, 8)}</p>
+                                            <p id='font2' className='text-xs sm:text-sm uppercase tracking-wider break-all'>Order #{order.orderId || order.id.slice(0, 8)}</p>
                                             <p id='font3' className='text-sm text-gray-500'>
                                                 {order.createdAt ? new Date(order.createdAt).toLocaleDateString('en-US', {
                                                     year: 'numeric', month: 'long', day: 'numeric'
@@ -99,7 +98,7 @@ const MyOrders = () => {
                                     {/* Items */}
                                     <div className='border-t border-gray-100 pt-4'>
                                         {order.items?.map((item, index) => (
-                                            <div key={index} className='flex justify-between items-center py-2'>
+                                            <div key={index} className='flex flex-wrap justify-between items-center py-2 gap-2'>
                                                 <div>
                                                     <p id='font1' className='text-base'>{item.name}</p>
                                                     <p id='font3' className='text-sm text-gray-500'>{item.size} × {item.quantity || 1}</p>

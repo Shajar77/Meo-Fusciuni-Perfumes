@@ -1,77 +1,83 @@
-import React from 'react'
 import { Link } from 'react-router-dom'
 import { GoHeart } from "react-icons/go";
+import { perfumes, getPriceDisplay } from '../data/perfumes';
 
 const Inventory = () => {
-    const perfumes = [
-        { id: 1, name: 'Isola', priceSmall: '10,00 €', priceLarge: '220,00 €' },
-        { id: 2, name: '1# Nota di Viaggio', priceSmall: '8,00 €', priceLarge: '180,00 €' },
-        { id: 3, name: '2# Nota di Viaggio', priceSmall: '8,00 €', priceLarge: '180,00 €' },
-        { id: 4, name: '3# Nota di Viaggio', priceSmall: '8,00 €', priceLarge: '180,00 €' },
-        { id: 5, name: 'Notturno', priceSmall: '8,00 €', priceLarge: '180,00 €' },
-        { id: 6, name: 'Luce', priceSmall: '8,00 €', priceLarge: '180,00 €' },
-        { id: 7, name: 'Narcotico', priceSmall: '10,00 €', priceLarge: '220,00 €' },
-        { id: 8, name: 'Odor 93', priceSmall: '10,00 €', priceLarge: '220,00 €' },
-        { id: 9, name: 'Little Song', priceSmall: '8,00 €', priceLarge: '180,00 €' },
-        { id: 10, name: 'Magnificat', priceSmall: '10,00 €', priceLarge: '220,00 €' },
-        { id: 11, name: 'L\'Oblio', priceSmall: '8,00 €', priceLarge: '180,00 €' },
-        { id: 12, name: 'Oro Rosso', priceSmall: '10,00 €', priceLarge: '220,00 €' },
-        { id: 13, name: 'Venezia', priceSmall: '10,00 €', priceLarge: '220,00 €' },
-        { id: 14, name: 'Roma', priceSmall: '8,00 €', priceLarge: '180,00 €' },
-        { id: 15, name: 'Firenze', priceSmall: '10,00 €', priceLarge: '220,00 €' },
-        { id: 16, name: 'Milano', priceSmall: '8,00 €', priceLarge: '180,00 €' },
-        { id: 17, name: 'Napoli', priceSmall: '10,00 €', priceLarge: '220,00 €' },
-        { id: 18, name: 'Palermo', priceSmall: '8,00 €', priceLarge: '180,00 €' },
-    ]
-
     return (
-        <div className='bg-white w-full'>
-            {/* PERFUMES Heading */}
-            <div className='border-t border-gray-200 py-8 sm:py-10 lg:py-12'>
-                <h1 id='font2' className='text-2xl sm:text-3xl lg:text-4xl text-center uppercase tracking-[0.15em]'>
-                    Perfumes
-                </h1>
+        <div className='bg-[var(--color-black-primary)] w-full min-h-screen'>
+            {/* Premium Header Section */}
+            <div className='py-16 sm:py-20 lg:py-24 border-b border-[var(--color-border)]'>
+                <div className='text-center px-4'>
+                    <p id='font2' className='text-[var(--color-gold)] text-xs uppercase tracking-[0.4em] mb-4'>
+                        The Collection
+                    </p>
+                    <h1 id='font1' className='text-[var(--color-text-primary)] text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-medium mb-6'>
+                        All Perfumes
+                    </h1>
+                    <div className='gold-divider mx-auto' />
+                </div>
             </div>
 
-            {/* Product Grid - Full Width */}
-            <div className='w-full px-4 sm:px-8 lg:px-12 xl:px-20 pb-16 lg:pb-20'>
-                <div className='grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 xl:gap-10'>
-                    {perfumes.map((perfume) => (
+            {/* Product Grid - Premium Dark */}
+            <div className='w-full px-4 sm:px-8 lg:px-12 xl:px-16 py-16 lg:py-20'>
+                <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 sm:gap-6 lg:gap-8'>
+                    {perfumes.map((perfume, index) => (
                         <Link
                             to={`/perfume/${perfume.id}`}
                             key={perfume.id}
-                            className='flex flex-col group cursor-pointer transition-all duration-500 hover:-translate-y-3 hover:shadow-2xl rounded-lg overflow-hidden bg-white hover:bg-gray-200'
+                            className='flex flex-col group cursor-pointer rounded-xl overflow-hidden bg-[var(--color-black-secondary)] border border-[var(--color-border)] hover:border-[var(--color-gold)] transition-all duration-700 hover-lift animate-fade-up'
+                            style={{ animationDelay: `${index * 0.05}s` }}
                         >
-                            {/* Product Image Container */}
-                            <div className='w-full bg-[#e8e8e8] group-hover:bg-[#d0d0d0] aspect-3/4 mb-0 overflow-hidden relative transition-all duration-500'>
+                            {/* Product Image Container - Premium Dark */}
+                            <div className='w-full bg-[var(--color-black-tertiary)] aspect-[3/4] overflow-hidden relative'>
                                 <img
-                                    src='https://www.meofusciuni.com/en/wp-content/uploads/sites/2/2025/07/Meo-Fusciuni-Sito-Still-Life-rfer.001-683x908.jpeg'
+                                    src={perfume.image}
                                     alt={perfume.name}
-                                    className='w-full h-full object-contain transition-all duration-500 ease-out group-hover:scale-110'
+                                    className='w-full h-full object-contain transition-transform duration-700 ease-out group-hover:scale-110'
+                                    loading="lazy"
+                                    decoding="async"
                                 />
-                                {/* Heart Icon */}
+
+                                {/* Hover Overlay */}
+                                <div className='absolute inset-0 bg-[var(--color-gold)]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500' />
+
+                                {/* Quick View Button - Appears on Hover */}
+                                <div className='absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500'>
+                                    <span id='font2' className='px-6 py-3 bg-[var(--color-black-primary)]/90 text-[var(--color-text-primary)] text-xs uppercase tracking-[0.2em] rounded-full backdrop-blur-sm transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500'>
+                                        Quick View
+                                    </span>
+                                </div>
+
+                                {/* Heart Icon - Premium Style */}
                                 <button
                                     onClick={(e) => e.preventDefault()}
-                                    className='absolute bottom-3 right-3 sm:bottom-4 sm:right-4 w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-full flex items-center justify-center shadow-md hover:scale-110 group-hover:shadow-lg transition-all duration-300'
+                                    className='absolute top-3 right-3 w-9 h-9 bg-[var(--color-black-primary)]/80 backdrop-blur-sm rounded-full flex items-center justify-center border border-[var(--color-border)] hover:border-[var(--color-gold)] hover:bg-[var(--color-gold)] group/heart transition-all duration-300 hover:scale-110'
                                 >
-                                    <GoHeart className='text-lg sm:text-xl text-gray-600 hover:text-red-500 group-hover:text-red-400 transition-colors' />
+                                    <GoHeart className='text-base text-[var(--color-text-secondary)] group-hover/heart:text-[var(--color-black-primary)] transition-colors' />
                                 </button>
                             </div>
 
-                            {/* Select Options Button */}
-                            <div className='w-full py-2.5 sm:py-3 border border-gray-300 bg-white group-hover:bg-black group-hover:text-white group-hover:border-black transition-all duration-300 flex items-center justify-center gap-2'>
-                                <span id='font2' className='text-[10px] sm:text-[11px] lg:text-[12px] tracking-widest'>Select options</span>
-                                <span className='text-sm sm:text-base'>→</span>
-                            </div>
-
-                            {/* Product Name & Price */}
-                            <div className='pt-3 sm:pt-4 pb-4 text-center bg-white'>
-                                <p id='font3' className='text-[12px] sm:text-[13px] lg:text-[14px] italic text-black mb-1 group-hover:text-amber-800 transition-colors duration-300'>
+                            {/* Product Info - Premium Dark */}
+                            <div className='p-4 sm:p-5 flex flex-col flex-grow'>
+                                {/* Product Name */}
+                                <h3 id='font1' className='text-[var(--color-text-primary)] text-sm sm:text-base font-medium mb-2 group-hover:text-[var(--color-gold)] transition-colors duration-300'>
                                     {perfume.name}
+                                </h3>
+
+                                {/* Price - Gold Accent */}
+                                <p id='font2' className='text-[var(--color-gold)] text-[10px] sm:text-xs tracking-wider mb-4'>
+                                    {getPriceDisplay(perfume.priceSmall, perfume.priceLarge)}
                                 </p>
-                                <p id='font2' className='text-[10px] sm:text-[11px] lg:text-[12px] text-amber-600 group-hover:text-amber-700 transition-colors duration-300'>
-                                    {perfume.priceSmall} – {perfume.priceLarge}
-                                </p>
+
+                                {/* Add to Cart Button */}
+                                <div className='mt-auto pt-3 border-t border-[var(--color-border)] group-hover:border-[var(--color-gold)]/50 transition-colors duration-300'>
+                                    <div className='flex items-center justify-between text-[var(--color-text-muted)] group-hover:text-[var(--color-gold)] transition-colors duration-300'>
+                                        <span id='font2' className='text-[10px] sm:text-[11px] uppercase tracking-wider'>
+                                            View Details
+                                        </span>
+                                        <span className='transform group-hover:translate-x-1 transition-transform duration-300'>→</span>
+                                    </div>
+                                </div>
                             </div>
                         </Link>
                     ))}

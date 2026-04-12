@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useRef, useState } from 'react'
+import { lazy, Suspense } from 'react'
 import Navbar from '../components/Navbar'
 import Note from '../components/Note'
 import Footer from '../components/Footer'
@@ -8,62 +8,21 @@ const ChromaGrid = lazy(() => import('../components/ChromaGrid'))
 const Testimonials = lazy(() => import('../components/Testimonials'))
 
 const Home = () => {
-    const videoRef = useRef(null)
-    const [allowMotion, setAllowMotion] = useState(true)
-
-    useEffect(() => {
-        const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-        const applyMotionPreference = () => setAllowMotion(!mediaQuery.matches)
-        applyMotionPreference()
-
-        if (mediaQuery.addEventListener) {
-            mediaQuery.addEventListener('change', applyMotionPreference)
-        } else {
-            mediaQuery.addListener(applyMotionPreference)
-        }
-
-        return () => {
-            if (mediaQuery.removeEventListener) {
-                mediaQuery.removeEventListener('change', applyMotionPreference)
-            } else {
-                mediaQuery.removeListener(applyMotionPreference)
-            }
-        }
-    }, [])
-
-    useEffect(() => {
-        const video = videoRef.current
-        if (!video || !allowMotion) return
-
-        const handleVisibility = () => {
-            if (document.hidden) {
-                video.pause()
-            } else {
-                void video.play().catch(() => {})
-            }
-        }
-
-        document.addEventListener('visibilitychange', handleVisibility)
-        return () => document.removeEventListener('visibilitychange', handleVisibility)
-    }, [allowMotion])
-
     return (
         <div className='w-full overflow-x-hidden bg-[var(--color-black-primary)]'>
             {/* Cinematic Hero Section */}
             <div className='relative min-h-screen w-full overflow-hidden'>
-                {/* Video Background */}
-                <video
-                    ref={videoRef}
-                    autoPlay={allowMotion}
-                    muted
-                    loop
-                    playsInline
-                    preload='metadata'
-                    poster='/Meo-Fusciuni-Sito-Still-Life-100-ml.003-960x1277.jpeg'
-                    className='absolute top-0 left-0 w-full h-full object-cover z-0'
-                >
-                    <source src="/download.mp4" type="video/mp4" />
-                </video>
+                {/* Hero Background Image */}
+                <div className='absolute top-0 left-0 w-full h-full z-0 bg-[#0a0a0a]'>
+                    <img
+                        src='/pexels-muhammad-khairul-iddin-adnan-267454-808506 (1).jpg'
+                        alt='Luxury perfume aesthetic'
+                        loading='eager'
+                        decoding='async'
+                        fetchPriority='high'
+                        className='w-full h-full object-cover'
+                    />
+                </div>
 
                 {/* Navbar */}
                 <div className='relative z-20'>

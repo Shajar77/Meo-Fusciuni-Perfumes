@@ -7,16 +7,19 @@ const CircularGallery = lazy(() => import('./CircularGallery'))
 const Note = () => {
     return (
         <div className='bg-[var(--color-black-primary)] py-16 sm:py-20 px-6 sm:px-8'>
-            {/* Image Background Container */}
-            <div className='mx-4 sm:mx-6 lg:mx-12 relative rounded-3xl sm:rounded-[2.5rem] overflow-hidden'>
-                {/* Background Image */}
+            {/* Image Background Container - Lazy loaded */}
+            <div className='mx-4 sm:mx-6 lg:mx-12 relative rounded-3xl sm:rounded-[2.5rem] overflow-hidden min-h-[400px]'>
+                {/* Background Image - Lazy loaded with placeholder */}
+                <div className='absolute inset-0 bg-[var(--color-black-secondary)] animate-pulse' />
                 <img
                     src='/download (12).jpg'
                     alt='Perfume philosophy backdrop'
                     loading='lazy'
                     decoding='async'
                     fetchPriority='low'
-                    className='absolute inset-0 w-full h-full object-cover'
+                    className='absolute inset-0 w-full h-full object-cover transition-opacity duration-500'
+                    onLoad={(e) => e.target.classList.remove('opacity-0')}
+                    style={{ opacity: 0 }}
                 />
                 {/* Dark Overlay for Text Readability */}
                 <div className='absolute inset-0 bg-black/60' />

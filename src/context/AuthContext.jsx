@@ -24,6 +24,7 @@ export const AuthProvider = ({ children }) => {
 
     // Get user data from Firestore (defined first so other functions can use it)
     const getUserData = useCallback(async (uid) => {
+        if (!db) return null
         try {
             const userDoc = await getDoc(doc(db, 'users', uid))
             if (userDoc.exists()) {
@@ -38,6 +39,7 @@ export const AuthProvider = ({ children }) => {
 
     // Sign up with email
     const signUp = useCallback(async (email, password, firstName, lastName) => {
+        if (!auth || !db) return { success: false, error: 'Firebase not configured' }
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password)
 
@@ -61,6 +63,7 @@ export const AuthProvider = ({ children }) => {
 
     // Sign in with email
     const signIn = useCallback(async (email, password) => {
+        if (!auth || !db) return { success: false, error: 'Firebase not configured' }
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password)
             // Fetch user data to get role for redirect
@@ -74,6 +77,7 @@ export const AuthProvider = ({ children }) => {
 
     // Sign out
     const logout = useCallback(async () => {
+        if (!auth) return { success: false, error: 'Firebase not configured' }
         try {
             await firebaseSignOut(auth)
             setUser(null)
@@ -86,6 +90,7 @@ export const AuthProvider = ({ children }) => {
 
     // Reset password
     const resetPassword = useCallback(async (email) => {
+        if (!auth) return { success: false, error: 'Firebase not configured' }
         try {
             await sendPasswordResetEmail(auth, email)
             return { success: true }
@@ -101,6 +106,10 @@ export const AuthProvider = ({ children }) => {
 
     // Listen for auth state changes
     useEffect(() => {
+        if (!auth) {
+            setLoading(false)
+            return () => {}
+        }
         const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
             if (firebaseUser) {
                 const userData = await getUserData(firebaseUser.uid)

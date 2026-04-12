@@ -3,6 +3,7 @@ import { db } from '../firebase'
 
 // Save cart to Firestore
 export const saveCartToFirestore = async (userId, cartItems) => {
+    if (!db) return { success: false, error: 'Firebase not configured' }
     try {
         const cartRef = doc(db, 'carts', userId)
         await setDoc(cartRef, {
@@ -18,6 +19,7 @@ export const saveCartToFirestore = async (userId, cartItems) => {
 
 // Save favorites to Firestore
 export const saveFavoritesToFirestore = async (userId, favorites) => {
+    if (!db) return { success: false, error: 'Firebase not configured' }
     try {
         const favoritesRef = doc(db, 'favorites', userId)
         await setDoc(favoritesRef, {
@@ -33,6 +35,7 @@ export const saveFavoritesToFirestore = async (userId, favorites) => {
 
 // Load cart from Firestore
 export const loadCartFromFirestore = async (userId) => {
+    if (!db) return { success: true, items: [] }
     try {
         const cartRef = doc(db, 'carts', userId)
         const cartDoc = await getDoc(cartRef)
@@ -48,6 +51,7 @@ export const loadCartFromFirestore = async (userId) => {
 
 // Load favorites from Firestore
 export const loadFavoritesFromFirestore = async (userId) => {
+    if (!db) return { success: true, items: [] }
     try {
         const favoritesRef = doc(db, 'favorites', userId)
         const favoritesDoc = await getDoc(favoritesRef)
@@ -63,6 +67,10 @@ export const loadFavoritesFromFirestore = async (userId) => {
 
 // Subscribe to cart changes (real-time sync)
 export const subscribeToCart = (userId, callback) => {
+    if (!db) {
+        callback([])
+        return () => {}
+    }
     const cartRef = doc(db, 'carts', userId)
     return onSnapshot(cartRef, (doc) => {
         if (doc.exists()) {
@@ -78,6 +86,10 @@ export const subscribeToCart = (userId, callback) => {
 
 // Subscribe to favorites changes (real-time sync)
 export const subscribeToFavorites = (userId, callback) => {
+    if (!db) {
+        callback([])
+        return () => {}
+    }
     const favoritesRef = doc(db, 'favorites', userId)
     return onSnapshot(favoritesRef, (doc) => {
         if (doc.exists()) {
@@ -93,6 +105,7 @@ export const subscribeToFavorites = (userId, callback) => {
 
 // Clear cart from Firestore
 export const clearCartFromFirestore = async (userId) => {
+    if (!db) return { success: false, error: 'Firebase not configured' }
     try {
         const cartRef = doc(db, 'carts', userId)
         await setDoc(cartRef, {

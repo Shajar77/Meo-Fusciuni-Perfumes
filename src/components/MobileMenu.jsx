@@ -14,7 +14,7 @@ const MobileMenu = ({
     if (!isOpen) return null;
 
     return (
-        <div className='fixed inset-0 top-[72px] bg-[var(--color-black-primary)] z-50 md:hidden sm:top-[76px]'>
+        <div className='fixed inset-0 top-[72px] bg-black z-[100] md:hidden sm:top-[76px] overflow-y-auto'>
             <div className='flex flex-col items-center py-12 gap-8'>
                 {[
                     { to: '/', label: 'Home' },

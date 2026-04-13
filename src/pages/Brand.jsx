@@ -104,8 +104,8 @@ const Brand = () => {
                             className='w-full h-full object-cover'
                         />
                         <div className='absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent' />
-                        <div className='absolute inset-0 flex items-start sm:items-center justify-center sm:justify-start pt-20 sm:pt-0 px-8 sm:px-12 lg:px-20'>
-                            <div className='reveal-on-scroll opacity-0 translate-y-10 transition-all duration-1000 w-full sm:w-auto sm:max-w-sm text-center sm:text-left'>
+                        <div className='absolute inset-0 flex items-start sm:items-center justify-center sm:justify-start pt-12 sm:pt-0 px-8 sm:px-12 lg:px-20'>
+                            <div className='reveal-on-scroll opacity-0 translate-y-10 transition-all duration-1000 w-full sm:w-auto sm:max-w-md text-center sm:text-left'>
                                 <div className='flex items-center justify-center sm:justify-start gap-4 mb-6'>
                                     <div className='hidden sm:block w-12 h-px bg-[var(--color-gold)]' />
                                     <p id='font2' className='text-[var(--color-gold)] text-xs uppercase tracking-[0.3em]'>

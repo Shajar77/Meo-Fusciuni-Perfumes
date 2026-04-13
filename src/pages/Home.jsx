@@ -1,8 +1,7 @@
 import { lazy, Suspense } from 'react'
-import Navbar from '../components/Navbar'
 import Note from '../components/Note'
-import Footer from '../components/Footer'
 import LazySection from '../components/LazySection'
+import SEO from '../components/SEO'
 
 const ChromaGrid = lazy(() => import('../components/ChromaGrid'))
 const Testimonials = lazy(() => import('../components/Testimonials'))
@@ -10,23 +9,19 @@ const Testimonials = lazy(() => import('../components/Testimonials'))
 const Home = () => {
     return (
         <div className='w-full overflow-x-hidden bg-[var(--color-black-primary)]'>
+            <SEO title="Home" description="Experience handcrafted niche fragrances designed to evoke memories, poetry, and nature." />
             {/* Cinematic Hero Section */}
             <div className='relative min-h-screen w-full overflow-hidden'>
                 {/* Hero Background Image */}
                 <div className='absolute top-0 left-0 w-full h-full z-0 bg-[#0a0a0a]'>
                     <img
-                        src='/pexels-muhammad-khairul-iddin-adnan-267454-808506 (1).jpg'
+                        src='/pexels-muhammad-khairul-iddin-adnan-267454-808506 (1).webp'
                         alt='Luxury perfume aesthetic'
                         loading='eager'
                         decoding='async'
                         fetchPriority='high'
                         className='w-full h-full object-cover'
                     />
-                </div>
-
-                {/* Navbar */}
-                <div className='relative z-20'>
-                    <Navbar />
                 </div>
 
             </div>
@@ -74,8 +69,6 @@ const Home = () => {
                     <Testimonials />
                 </Suspense>
             </LazySection>
-
-            <Footer />
         </div>
     )
 }

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom'
-import Navbar from '../components/Navbar'
-import Footer from '../components/Footer'
+
+
 import { useAuth } from '../context/AuthContext'
 import { createOrder, initiateJazzCashPayment, initiateEasypaisaPayment, initiateCODPayment } from '../services/paymentService'
 import { perfumes } from '../data/perfumes'
@@ -121,8 +121,7 @@ const Checkout = () => {
 
     return (
         <div className='w-full bg-[#f8f8f8]'>
-            <Navbar />
-            <div className='pt-[72px] sm:pt-[76px] lg:pt-[80px]'>
+            <div className='w-full'>
 
                 {/* Header */}
                 <div className='bg-black py-12 sm:py-16'>
@@ -390,8 +389,6 @@ const Checkout = () => {
                         </div>
                     </div>
                 </div>
-
-                <Footer />
             </div>
         </div>
     )

@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { Link } from 'react-router-dom'
-import Navbar from '../components/Navbar'
-import Footer from '../components/Footer'
+
+
 import { useCart } from '../context/CartContext'
 import { GoHeart, GoHeartFill } from "react-icons/go";
 import { IoBagOutline } from "react-icons/io5";
@@ -22,8 +22,7 @@ const Favorites = () => {
 
     return (
         <div className='w-full min-h-screen bg-[#0a0a0a]'>
-            <Navbar />
-            <div className='pt-[72px] sm:pt-[76px] lg:pt-[80px]'>
+            <div className='w-full'>
 
                 {/* Header */}
                 <div className='relative py-16 sm:py-24 border-b border-white/10'>
@@ -104,8 +103,6 @@ const Favorites = () => {
                         </div>
                     )}
                 </div>
-
-                <Footer />
             </div>
         </div>
     )

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import Navbar from '../components/Navbar'
+
 
 const Login = () => {
     const navigate = useNavigate()
@@ -81,7 +81,6 @@ const Login = () => {
 
     return (
         <div className='h-screen w-full flex flex-col overflow-hidden'>
-            <Navbar />
             <div className='flex-1 flex pt-[72px] h-[calc(100vh-72px)]'>
                 {/* Left Side - Form */}
                 <div className='w-full lg:w-1/2 flex flex-col justify-center px-6 sm:px-12 lg:px-20 py-6 bg-[#0a0a0a]'>
@@ -261,7 +260,7 @@ const Login = () => {
                 {/* Right Side - Image */}
                 <div className='hidden lg:block w-1/2 relative bg-gray-100'>
                     <img
-                        src='/pexels-kseniya-kopna-52379050-11556383.jpg'
+                        src='/pexels-kseniya-kopna-52379050-11556383.webp'
                         alt='Meo Fusciuni Perfume'
                         className='w-full h-full object-cover object-center'
                     />

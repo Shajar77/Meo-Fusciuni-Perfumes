@@ -7,7 +7,9 @@ import { IoBagOutline } from "react-icons/io5";
 import { HiOutlineMenuAlt3 } from "react-icons/hi";
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
-import { perfumes, getPriceDisplay } from '../data/perfumes';
+import { perfumes } from '../data/perfumes';
+import GlobalSearchModal from './GlobalSearchModal';
+import MobileMenu from './MobileMenu';
 
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -190,176 +192,29 @@ const Navbar = () => {
                     </button>
                 </div>
 
-                {/* Mobile Menu - Full Screen Premium Dark */}
-                {isMenuOpen && (
-                    <div className='fixed inset-0 top-[72px] bg-[var(--color-black-primary)] z-50 md:hidden sm:top-[76px]'>
-                        <div className='flex flex-col items-center py-12 gap-8'>
-                            {[
-                                { to: '/', label: 'Home' },
-                                { to: '/Perfumes', label: 'Perfumes' },
-                                { to: '/Brand', label: 'Brand' },
-                                { to: '/Contact', label: 'Contact' }
-                            ].map((item, index) => (
-                                <NavLink
-                                    key={item.to}
-                                    to={item.to} 
-                                    end={item.to === '/'}
-                                    onClick={() => setIsMenuOpen(false)} 
-                                    className={({ isActive }) => `
-                                        text-xl sm:text-2xl uppercase tracking-[0.1em] font-light text-center px-6
-                                        transition-all duration-500
-                                        animate-fade-up
-                                        ${isActive 
-                                            ? 'text-[var(--color-gold)]' 
-                                            : 'text-[var(--color-text-primary)] hover:text-[var(--color-gold)]'}
-                                    `}
-                                    style={{ animationDelay: `${index * 0.1}s` }}
-                                >
-                                    {item.label}
-                                </NavLink>
-                            ))}
-
-                            <div className='flex items-center gap-8 mt-8 pt-8 border-t border-[var(--color-border)]'>
-                                <Link to='/favorites' onClick={() => setIsMenuOpen(false)} className='relative text-[var(--color-text-secondary)]'>
-                                    <GoHeart className='text-2xl' />
-                                    {favorites.length > 0 && (
-                                        <span className='absolute -top-1 -right-1 w-4 h-4 bg-[var(--color-gold)] text-[var(--color-black-primary)] text-[9px] font-bold rounded-full flex items-center justify-center'>
-                                            {favorites.length}
-                                        </span>
-                                    )}
-                                </Link>
-                                {user ? (
-                                    <div className='w-10 h-10 rounded-full bg-[var(--color-gold)] text-[var(--color-black-primary)] flex items-center justify-center text-base font-bold'>
-                                        {user.firstName.charAt(0).toUpperCase()}
-                                    </div>
-                                ) : (
-                                    <Link to='/login' onClick={() => setIsMenuOpen(false)} className='text-[var(--color-text-secondary)]'>
-                                        <LuUser className='text-2xl' />
-                                    </Link>
-                                )}
-                                <Link to='/cart' onClick={() => setIsMenuOpen(false)} className='relative text-[var(--color-text-secondary)]'>
-                                    <IoBagOutline className='text-2xl' />
-                                    {cartCount > 0 && (
-                                        <span className='absolute -top-1 -right-1 w-4 h-4 bg-[var(--color-gold)] text-[var(--color-black-primary)] text-[9px] font-bold rounded-full flex items-center justify-center'>
-                                            {cartCount}
-                                        </span>
-                                    )}
-                                </Link>
-                            </div>
-
-                            {user && (
-                                <button
-                                    onClick={() => { logout(); setIsMenuOpen(false); }}
-                                    className='text-red-400 text-sm mt-4 uppercase tracking-wider'
-                                >
-                                    Sign Out
-                                </button>
-                            )}
-                        </div>
-                    </div>
-                )}
+                {/* Mobile Menu Component */}
+                <MobileMenu 
+                    isOpen={isMenuOpen}
+                    onClose={() => setIsMenuOpen(false)}
+                    favorites={favorites}
+                    user={user}
+                    cartCount={cartCount}
+                    logout={logout}
+                />
 
             </nav>
 
-            {/* Premium Search Modal - Dark Theme */}
-            {isSearchOpen && (
-                <div className='fixed inset-0 z-[100] bg-[var(--color-black-primary)]/95 backdrop-blur-xl'>
-                    <div className='w-full min-h-screen'>
-                        <div className='max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8'>
-                            {/* Search Header */}
-                            <div className='flex items-center justify-between mb-12'>
-                                <h2 id='font2' className='text-base sm:text-lg uppercase tracking-[0.2em] text-[var(--color-text-primary)]'>
-                                    Search Perfumes
-                                </h2>
-                                <button
-                                    onClick={() => { setIsSearchOpen(false); setSearchQuery(''); }}
-                                    className='p-3 text-[var(--color-text-secondary)] hover:text-[var(--color-gold)] transition-all duration-300 hover:rotate-90'
-                                >
-                                    <IoCloseOutline className='text-2xl' />
-                                </button>
-                            </div>
-
-                            {/* Search Input - Premium Dark */}
-                            <div className='relative mb-12'>
-                                <IoSearchOutline className='absolute left-0 top-1/2 -translate-y-1/2 text-[var(--color-gold)] text-2xl' />
-                                <input
-                                    type='text'
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    placeholder='Search for a perfume...'
-                                    autoFocus
-                                    id='font3'
-                                    className='w-full pl-10 sm:pl-12 pr-4 py-4 sm:py-6 text-lg sm:text-2xl bg-transparent border-b-2 border-[var(--color-border)] focus:border-[var(--color-gold)] focus:outline-none transition-all duration-500 text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)]'
-                                />
-                            </div>
-
-                            {/* Search Results - Premium Dark Cards */}
-                            <div className='max-h-[55vh] sm:max-h-[60vh] overflow-y-auto'>
-                                {searchQuery.length > 0 && filteredPerfumes.length === 0 && (
-                                    <p id='font3' className='text-center text-[var(--color-text-muted)] py-12 text-lg'>
-                                        No perfumes found for "{searchQuery}"
-                                    </p>
-                                )}
-
-                                {filteredPerfumes.length > 0 && (
-                                    <div className='space-y-3'>
-                                        {filteredPerfumes.map((perfume, index) => (
-                                            <button
-                                                key={perfume.id}
-                                                onClick={() => handleSearchClick(perfume.id)}
-                                                className='w-full flex items-center gap-6 p-5 bg-[var(--color-black-secondary)] border border-[var(--color-border)] hover:border-[var(--color-gold)] rounded-xl transition-all duration-500 group animate-fade-up'
-                                                style={{ animationDelay: `${index * 0.05}s` }}
-                                            >
-                                                <div className='w-20 h-20 bg-[var(--color-black-tertiary)] rounded-lg overflow-hidden flex-shrink-0'>
-                                                    <img
-                                                        src={perfume.image}
-                                                        alt={perfume.name}
-                                                        loading='lazy'
-                                                        decoding='async'
-                                                        fetchPriority='low'
-                                                        className='w-full h-full object-contain group-hover:scale-110 transition-transform duration-700'
-                                                    />
-                                                </div>
-                                                <div className='flex-1 text-left'>
-                                                    <p id='font1' className='text-xl text-[var(--color-text-primary)] mb-1 group-hover:text-[var(--color-gold)] transition-colors duration-300'>
-                                                        {perfume.name}
-                                                    </p>
-                                                    <p id='font2' className='text-sm text-[var(--color-gold)] tracking-wider'>
-                                                        {getPriceDisplay(perfume.priceSmall, perfume.priceLarge)}
-                                                    </p>
-                                                </div>
-                                                <span className='text-[var(--color-gold)] text-2xl transform group-hover:translate-x-2 transition-transform duration-300'>→</span>
-                                            </button>
-                                        ))}
-                                    </div>
-                                )}
-
-                                {/* Popular Searches - Premium Dark */}
-                                {searchQuery.length === 0 && (
-                                    <div className='animate-fade-up'>
-                                        <p id='font2' className='text-xs uppercase tracking-[0.2em] text-[var(--color-text-muted)] mb-6'>
-                                            Popular Searches
-                                        </p>
-                                        <div className='flex flex-wrap gap-3'>
-                                            {['Isola', 'Notturno', 'Luce', 'Narcotico', 'Venezia'].map((name, index) => (
-                                                <button
-                                                    key={name}
-                                                    onClick={() => setSearchQuery(name)}
-                                                    id='font3'
-                                                    className='px-6 py-3 bg-[var(--color-black-secondary)] border border-[var(--color-border)] hover:border-[var(--color-gold)] text-[var(--color-text-secondary)] hover:text-[var(--color-gold)] rounded-full text-sm transition-all duration-300 hover:scale-105'
-                                                    style={{ animationDelay: `${index * 0.1}s` }}
-                                                >
-                                                    {name}
-                                                </button>
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
+            <GlobalSearchModal 
+                isOpen={isSearchOpen}
+                onClose={() => {
+                    setIsSearchOpen(false);
+                    setSearchQuery('');
+                }}
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+                filteredPerfumes={filteredPerfumes}
+                onResultClick={handleSearchClick}
+            />
         </>
     )
 }

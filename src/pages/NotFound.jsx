@@ -1,12 +1,9 @@
 import { Link } from 'react-router-dom'
-import Navbar from '../components/Navbar'
-import Footer from '../components/Footer'
 
 const NotFound = () => {
     return (
         <div className='w-full min-h-screen bg-[#f8f8f8]'>
-            <Navbar />
-            <div className='pt-[72px] sm:pt-[76px] lg:pt-[80px]'>
+            <div className='w-full'>
                 <div className='max-w-4xl mx-auto px-6 py-20 sm:py-32 text-center'>
                     {/* 404 Display */}
                     <div className='mb-8'>
@@ -53,7 +50,6 @@ const NotFound = () => {
                     </div>
                 </div>
             </div>
-            <Footer />
         </div>
     )
 }

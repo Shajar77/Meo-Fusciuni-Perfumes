@@ -1,6 +1,6 @@
 import { Link, useLocation, Navigate } from 'react-router-dom'
-import Navbar from '../components/Navbar'
-import Footer from '../components/Footer'
+
+
 
 const OrderConfirmation = () => {
     const location = useLocation()
@@ -12,8 +12,7 @@ const OrderConfirmation = () => {
 
     return (
         <div className='w-full min-h-screen bg-[#f8f8f8]'>
-            <Navbar />
-            <div className='pt-[72px] sm:pt-[76px] lg:pt-[80px]'>
+            <div className='w-full'>
 
                 {/* Success Header */}
                 <div className='bg-green-600 py-12 sm:py-16'>
@@ -147,8 +146,6 @@ const OrderConfirmation = () => {
                         </p>
                     </div>
                 </div>
-
-                <Footer />
             </div>
         </div>
     )

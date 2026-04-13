@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { collection, getDocs, updateDoc, doc, orderBy, query } from 'firebase/firestore'
 import { db } from '../../firebase'
-import Navbar from '../../components/Navbar'
+
 
 const AdminOrders = () => {
     const [orders, setOrders] = useState([])
@@ -50,8 +50,7 @@ const AdminOrders = () => {
 
     return (
         <div className='w-full min-h-screen bg-gray-50'>
-            <Navbar />
-            <div className='pt-[72px] sm:pt-[76px] lg:pt-[80px]'>
+            <div className='w-full'>
                 <div className='max-w-7xl mx-auto px-4 sm:px-6 py-8'>
                     {/* Header */}
                     <div className='mb-8'>

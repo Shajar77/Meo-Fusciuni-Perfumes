@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom'
 import { collection, query, where, getDocs, orderBy } from 'firebase/firestore'
 import { db } from '../firebase'
 import { useAuth } from '../context/AuthContext'
-import Navbar from '../components/Navbar'
-import Footer from '../components/Footer'
+
+
 
 const MyOrders = () => {
     const { user } = useAuth()
@@ -44,8 +44,7 @@ const MyOrders = () => {
 
     return (
         <div className='w-full min-h-screen bg-[#f8f8f8]'>
-            <Navbar />
-            <div className='pt-[72px] sm:pt-[76px] lg:pt-[80px]'>
+            <div className='w-full'>
 
                 {/* Header */}
                 <div className='bg-black py-12 sm:py-16'>
@@ -125,8 +124,6 @@ const MyOrders = () => {
                         </div>
                     )}
                 </div>
-
-                <Footer />
             </div>
         </div>
     )

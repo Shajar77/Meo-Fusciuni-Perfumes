@@ -4,8 +4,8 @@ import { doc, updateDoc } from 'firebase/firestore'
 import { updatePassword, EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth'
 import { db, auth } from '../firebase'
 import { useAuth } from '../context/AuthContext'
-import Navbar from '../components/Navbar'
-import Footer from '../components/Footer'
+
+
 
 const Profile = () => {
     const { user, logout } = useAuth()
@@ -101,8 +101,7 @@ const Profile = () => {
 
     return (
         <div className='w-full min-h-screen bg-[#f8f8f8]'>
-            <Navbar />
-            <div className='pt-[72px] sm:pt-[76px] lg:pt-[80px]'>
+            <div className='w-full'>
 
                 {/* Header */}
                 <div className='bg-black py-12 sm:py-16'>
@@ -279,8 +278,6 @@ const Profile = () => {
                         Sign Out
                     </button>
                 </div>
-
-                <Footer />
             </div>
         </div>
     )

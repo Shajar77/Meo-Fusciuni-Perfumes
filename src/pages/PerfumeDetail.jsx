@@ -1,7 +1,7 @@
 import { useState, useCallback, useMemo } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import Navbar from '../components/Navbar'
-import Footer from '../components/Footer'
+
+
 import { GoHeart, GoHeartFill } from "react-icons/go";
 import { useCart } from '../context/CartContext'
 import { perfumes } from '../data/perfumes'
@@ -72,8 +72,7 @@ const PerfumeDetail = () => {
 
     return (
         <div className='w-full bg-[#faf9f7]'>
-            <Navbar />
-            <div className='pt-[72px] sm:pt-[76px] lg:pt-[80px]'>
+            <div className='w-full'>
 
                 {/* Product Section */}
                 <section className='py-12 sm:py-16 lg:py-24'>
@@ -176,8 +175,6 @@ const PerfumeDetail = () => {
                         </div>
                     </div>
                 </section>
-
-                <Footer />
             </div>
         </div>
     )

@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react'
-import Navbar from '../components/Navbar'
-import Footer from '../components/Footer'
+import SEO from '../components/SEO'
 
 const Brand = () => {
     const observerRef = useRef(null)
@@ -27,11 +26,12 @@ const Brand = () => {
 
     return (
         <div className='w-full bg-[var(--color-black-primary)]'>
+            <SEO title="Our Brand" description="Learn about the origins of Meo Fusciuni Perfumes and the art of poetry in fragrance." />
             {/* Hero Section - Cinematic */}
             <section className='relative min-h-screen overflow-hidden'>
                 <div className='absolute inset-0'>
                     <img
-                        src='/pexels-tara-winstead-6694187.jpg'
+                        src='/pexels-tara-winstead-6694187.webp'
                         alt='Meo Fusciuni'
                         loading='eager'
                         decoding='async'
@@ -40,11 +40,6 @@ const Brand = () => {
                     />
                 </div>
                 <div className='absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-[var(--color-black-primary)]' />
-
-                {/* Navbar */}
-                <div className='relative z-20'>
-                    <Navbar />
-                </div>
 
                 {/* Hero Content - Centered */}
                 <div className='absolute inset-0 z-10 flex flex-col items-center justify-center px-6 text-center'>
@@ -101,7 +96,7 @@ const Brand = () => {
                 <section className='relative'>
                     <div className='h-[60vh] sm:h-[70vh] relative overflow-hidden'>
                         <img
-                            src='/pexels-jean-pierre-3622694-5466870.jpg'
+                            src='/pexels-jean-pierre-3622694-5466870.webp'
                             alt='Philosophy'
                             loading='lazy'
                             decoding='async'
@@ -129,8 +124,6 @@ const Brand = () => {
                         </div>
                     </div>
                 </section>
-
-                <Footer />
             </div>
     )
 }
